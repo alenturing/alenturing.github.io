@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alen's Personal Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background: #4CAF50;
+            color: #fff;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        section {
+            margin: 20px 0;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        .skills, .education, .experience {
+            list-style: none;
+            padding: 0;
+        }
+        .skills li, .education li, .experience li {
+            margin: 10px 0;
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-form label {
+            margin: 10px 0 5px;
+        }
+        .contact-form input, .contact-form textarea {
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .contact-form button {
+            padding: 10px;
+            font-size: 1em;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .contact-form button:hover {
+            background: #45a049;
+        }
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Alen's Personal Page</h1>
+    </header>
+
+    <section>
+        <h2>Personal Introduction</h2>
+        <p>Hi, my name is Alen. I have a passion for singing, dancing, rapping, and playing basketball. I am currently studying at the University of Zurich.</p>
+    </section>
+
+    <section>
+        <h2>Skills</h2>
+        <ul class="skills">
+            <li>Singing</li>
+            <li>Dancing</li>
+            <li>Rapping</li>
+            <li>Basketball</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Experience</h2>
+        <ul class="experience">
+            <li>Practiced basketball with the school team in the United States for two and a half years.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Education</h2>
+        <ul class="education">
+            <li>Currently studying at the University of Zurich.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:han358999@gamil.com">han358999@gamil.com</a></p>
+        <form class="contact-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+</div>
+
+</body>
+</html>
