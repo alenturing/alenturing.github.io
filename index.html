@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alen's Personal Page</title>
+    <title>Kun Kun's Personal Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,82 +11,86 @@
             padding: 0;
             background-color: #f4f4f4;
         }
+
         .container {
-            width: 90%;
-            max-width: 1000px;
-            margin: 20px auto;
-            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        header {
+
+        h1 {
             text-align: center;
-            padding: 20px 0;
-            background: #4CAF50;
-            color: #fff;
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #4CAF50;
         }
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
+
         section {
-            margin: 20px 0;
+            margin-bottom: 40px;
         }
-        h2 {
-            color: #333;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 5px;
+
+        img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
         }
-        .skills, .education, .experience {
+
+        ul {
             list-style: none;
             padding: 0;
         }
-        .skills li, .education li, .experience li {
-            margin: 10px 0;
+
+        ul li {
+            margin-bottom: 10px;
         }
-        .contact-form {
-            display: flex;
-            flex-direction: column;
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
         }
-        .contact-form label {
-            margin: 10px 0 5px;
-        }
-        .contact-form input, .contact-form textarea {
+
+        form input[type="text"],
+        form input[type="email"],
+        form textarea {
+            width: 100%;
             padding: 10px;
-            font-size: 1em;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .contact-form button {
+
+        form button {
+            display: block;
+            width: 100%;
             padding: 10px;
-            font-size: 1em;
-            background: #4CAF50;
+            background-color: #4CAF50;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
-        .contact-form button:hover {
-            background: #45a049;
-        }
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 2em;
-            }
-        }
     </style>
+
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>Alen's Personal Page</h1>
-    </header>
+    <h1>Kun Kun's Personal Page</h1>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <!-- 可以根据需要添加更多的链接 -->
+        </ul>
+    </nav>
 
     <section>
-        <h2>Personal Introduction</h2>
-        <p>Hi, my name is Alen. I have a passion for singing, dancing, rapping, and playing basketball. I am currently studying at the University of Zurich.</p>
+        <img src="cxk.jpg" alt="Your Image" style="max-width: 20%; height: auto;">
+        <p>Hi, my name is Alen. I have a passion for singing, dancing, rapping, and playing basketball. I am currently studying at the University of KK.</p>
     </section>
 
     <section>
@@ -109,13 +113,13 @@
     <section>
         <h2>Education</h2>
         <ul class="education">
-            <li>Currently studying at the University of Zurich.</li>
+            <li>Currently studying at the University of KK.</li>
         </ul>
     </section>
 
     <section>
         <h2>Contact</h2>
-        <p>Email: <a href="mailto:114514@gamil.com">114514@gamil.com</a></p>
+        <p>Email: <a href="mailto:25252@gamil.com">25252@gamil.com</a></p>
         <form class="contact-form">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
