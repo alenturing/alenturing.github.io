@@ -1,139 +1,181 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kun Kun's Personal Page</title>
+    <title>我的书签导航</title>
     <style>
+        /* 基础样式 */
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+            font-family: "微软雅黑", sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
             padding: 20px;
+            background: #f0f2f5;
         }
 
-        h1 {
-            text-align: center;
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #4CAF50;
+        /* 分类容器 */
+        .category {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
-        section {
-            margin-bottom: 40px;
+        /* 分类标题 */
+        h2 {
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+            margin: 0 0 15px 0;
         }
 
-        img {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            height: auto;
+        /* 链接列表 */
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        ul li {
-            margin-bottom: 10px;
-        }
-
-        form label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        form input[type="text"],
-        form input[type="email"],
-        form textarea {
-            width: 100%;
+        /* 单个书签样式 */
+        a {
+            display: flex;
+            align-items: center;
             padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            color: #34495e;
+            text-decoration: none;
+            transition: all 0.2s;
         }
 
-        form button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        a:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 图标样式 */
+        a img {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
         }
     </style>
-
 </head>
 <body>
+    <h1 style="text-align: center; color: #2c3e50;">📚 我的常用导航</h1>
+    <div id="search" style="margin: 20px 0; text-align: center;">
+        <input type="text" placeholder="🔍 输入关键词搜索..." 
+               style="padding: 10px; width: 300px; border: 1px solid #ddd; border-radius: 20px;">
+    </div>
 
-<div class="container">
-    <h1>Kun Kun's Personal Page</h1>
+    <script>
+        // 动态添加网站图标
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.links a').forEach(link => {
+                try {
+                    const url = new URL(link.href);
+                    const faviconUrl = `https://icons.duckduckgo.com/ip3/${url.hostname}.ico`;
+                    const img = document.createElement('img');
+                    img.src = faviconUrl;
+                    link.prepend(img);
+                } catch(e) {
+                    console.log('无效的URL:', link.href);
+                }
+            });
+        });
 
-    <nav>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <!-- 可以根据需要添加更多的链接 -->
-        </ul>
-    </nav>
+        // 增强搜索功能
+        document.querySelector('input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            document.querySelectorAll('.category').forEach(category => {
+                // 清空搜索时显示全部
+                if (!searchTerm) {
+                    category.style.display = 'block';
+                    category.querySelectorAll('.links a').forEach(link => {
+                        link.style.display = 'flex';
+                    });
+                    return;
+                }
 
-    <section>
-        <img src="https://github.com/alenturing/alenturing.github.io/blob/main/cxk.jpeg" alt="Your Image" style="max-width: 20%; height: auto;">
-        <p>Hi, my name is Alen. I have a passion for singing, dancing, rapping, and playing basketball. I am currently studying at the University of KK.</p>
-    </section>
+                let hasVisible = false;
+                const links = category.querySelectorAll('.links a');
+                links.forEach(link => {
+                    const text = link.textContent.toLowerCase();
+                    const show = text.includes(searchTerm);
+                    link.style.display = show ? 'flex' : 'none';
+                    if (show) hasVisible = true;
+                });
+                
+                category.style.display = hasVisible ? 'block' : 'none';
+            });
+        });
+    </script>
 
-    <section>
-        <h2>Skills</h2>
-        <ul class="skills">
-            <li>Singing</li>
-            <li>Dancing</li>
-            <li>Rapping</li>
-            <li>Basketball</li>
-        </ul>
-    </section>
+    <!-- USTC -->
+    <div class="category">
+        <h2>🎆 USTC</h2>
+        <div class="links">
+            <a href="https://yjs1.ustc.edu.cn/gsapp/sys/yjsemaphome/portal/index.do?forceCas=1" target="_blank">USTC研究生</a>
+            <a href="https://email.ustc.edu.cn/" target="_blank">USTCmail</a>
+            <a href="https://rec.ustc.edu.cn/profile" target="_blank">REC睿课网</a>
+            <a href="https://pics.ustc.edu.cn/instrument" target="_blank">USTC理化中心</a>
+            <a href="https://yqzx.ustc.edu.cn/lfsms" target="_blank">USTC仪器共享</a>
+        </div>
+    </div>
 
-    <section>
-        <h2>Experience</h2>
-        <ul class="experience">
-            <li>Practiced basketball with the school team in the United States for two and a half years.</li>
-        </ul>
-    </section>
+    <!-- 工作区 -->
+    <div class="category">
+        <h2>💼 工作效率</h2>
+        <div class="links">
+            <a href="https://chat.deepseek.com" target="_blank">Deepseek</a>
+            <a href="https://ai-bot.cn" target="_blank">AIBOT</a>
+            <a href="https://www.neat-reader.cn/webapp#/" target="_blank">NeatReader</a>
+            <a href="https://docs.google.com" target="_blank">Google 文档</a>
+            <a href="https://trello.com" target="_blank">Trello 看板</a>
+            <a href="https://slack.com" target="_blank">Slack团队沟通</a>
+        </div>
+    </div>
 
-    <section>
-        <h2>Education</h2>
-        <ul class="education">
-            <li>Currently studying at the University of KK.</li>
-        </ul>
-    </section>
+    <!-- 化学工具 -->
+    <div class="category">
+        <h2>🧑‍🔬 化学实用工具</h2>
+        <div class="links">
+            <a href="https://www.chemicalaid.com/" target="_blank">ChemicalAid</a>
+            <a href="https://iupac.org/what-we-do/periodic-table-of-elements/" target="_blank">元素周期表</a>
+            <a href="https://legacy.materialsproject.org/" target="_blank">材料参数</a>
+        </div>
+    </div>
 
-    <section>
-        <h2>Contact</h2>
-        <p>Email: <a href="mailto:25252@gamil.com">25252@gamil.com</a></p>
-        <form class="contact-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+    <!-- 开发工具 -->
+    <div class="category">
+        <h2>💻 开发工具</h2>
+        <div class="links">
+            <a href="https://github.com" target="_blank">GitHub 仓库</a>
+            <a href="https://codepen.io" target="_blank">代码实验场codepen</a>
+            <a href="https://stackoverflow.com" target="_blank">技术问答</a>
+        </div>
+    </div>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+    <!-- 邮箱 -->
+    <div class="category">
+        <h2>📧 电子邮件</h2>
+        <div class="links">
+            <a href="https://email.163.com/" target="_blank">网易邮箱</a>
+            <a href="https://mail.qq.com/" target="_blank">QQ邮箱</a>
+            <a href="https://mail.google.com/mail?hl=zh-CN" target="_blank">Gmail</a>
+        </div>
+    </div>
 
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-
-            <button type="submit">Send Message</button>
-        </form>
-    </section>
-</div>
-
+    <!-- 学习资源 -->
+    <div class="category">
+        <h2>🎓 学习平台</h2>
+        <div class="links">
+            <a href="https://coursera.org" target="_blank">国际课程</a>
+            <a href="https://zhihu.com" target="_blank">知乎</a>
+            <a href="https://bilibili.com" target="_blank">B站视频学习</a>
+        </div>
+    </div>
 </body>
 </html>
