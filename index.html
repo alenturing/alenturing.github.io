@@ -76,7 +76,7 @@
             document.querySelectorAll('.links a').forEach(link => {
                 try {
                     const url = new URL(link.href);
-                    const faviconUrl = `https://icons.duckduckgo.com/ip3/${url.hostname}.ico`;
+                    const faviconUrl = `https://cravatar.com/favicon/api/index.php?url=${url.hostname}`;
                     const img = document.createElement('img');
                     img.src = faviconUrl;
                     link.prepend(img);
