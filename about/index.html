@@ -3,76 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alen's Personal Page</title>
+    <title>Alen | Creative Performer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2ECC71;
+            --secondary: #27AE60;
+            --accent: #E74C3C;
+            --dark: #2C3E50;
+            --light: #ECF0F1;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
         }
+
         .container {
             width: 90%;
-            max-width: 1000px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
         }
+
         header {
             text-align: center;
-            padding: 20px 0;
-            background: #4CAF50;
-            color: #fff;
+            padding: 40px 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
         }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1));
+            transform: rotate(45deg);
+        }
+
         header h1 {
             margin: 0;
-            font-size: 2.5em;
+            font-size: 3em;
+            font-weight: 600;
+            letter-spacing: 2px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
+
         section {
-            margin: 20px 0;
+            margin: 30px 0;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
         }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
         h2 {
-            color: #333;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 5px;
-        }
-        .skills, .education, .experience {
-            list-style: none;
-            padding: 0;
-        }
-        .skills li, .education li, .experience li {
-            margin: 10px 0;
-        }
-        .contact-form {
+            color: var(--secondary);
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-        .contact-form label {
-            margin: 10px 0 5px;
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
-        .contact-form input, .contact-form textarea {
-            padding: 10px;
-            font-size: 1em;
+
+        .skill-card {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .skill-card i {
+            font-size: 2em;
             margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            color: var(--secondary);
         }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.2);
+        }
+
         .contact-form button {
-            padding: 10px;
-            font-size: 1em;
-            background: #4CAF50;
-            color: #fff;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            padding: 12px 30px;
+            font-size: 1.1em;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            color: white;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
+
         .contact-form button:hover {
-            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
         }
-        @media (max-width: 600px) {
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
             header h1 {
-                font-size: 2em;
+                font-size: 2.2em;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -81,52 +194,79 @@
 
 <div class="container">
     <header>
-        <h1>Alen's Personal Page</h1>
+        <h1>Alen Smith</h1>
+        <p>Performer & Student</p>
     </header>
 
     <section>
-        <h2>Personal Introduction</h2>
-        <p>Hi, my name is Alen. I have a passion for singing, dancing, rapping, and playing basketball. I am currently studying at the University of Zurich.</p>
+        <h2><i class="fas fa-user"></i> About Me</h2>
+        <p class="intro-text">🎤 Passionate performer with expertise in singing, dancing, and rapping. 🏀 Basketball enthusiast with competitive experience. Currently pursuing my studies at the University of Zurich while developing my artistic career.</p>
     </section>
 
     <section>
-        <h2>Skills</h2>
-        <ul class="skills">
-            <li>Singing</li>
-            <li>Dancing</li>
-            <li>Rapping</li>
-            <li>Basketball</li>
-        </ul>
+        <h2><i class="fas fa-star"></i> Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <i class="fas fa-microphone"></i>
+                <h3>Singing</h3>
+                <p>Vocal techniques & stage performance</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-music"></i>
+                <h3>Dancing</h3>
+                <p>Contemporary & urban styles</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-comment-dots"></i>
+                <h3>Rapping</h3>
+                <p>Lyric composition & flow mastery</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-basketball-ball"></i>
+                <h3>Basketball</h3>
+                <p>Team play & competitive strategies</p>
+            </div>
+        </div>
     </section>
 
     <section>
-        <h2>Experience</h2>
-        <ul class="experience">
-            <li>Practiced basketball with the school team in the United States for two and a half years.</li>
-        </ul>
+        <h2><i class="fas fa-briefcase"></i> Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>School Basketball Team (USA)</h3>
+                <p>2020-2022 | Intensive training and competition participation</p>
+                <ul>
+                    <li>Developed advanced team play strategies</li>
+                    <li>Participated in regional championships</li>
+                </ul>
+            </div>
+        </div>
     </section>
 
     <section>
-        <h2>Education</h2>
-        <ul class="education">
-            <li>Currently studying at the University of Zurich.</li>
-        </ul>
+        <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>University of Zurich</h3>
+                <p>2022-Present | Bachelor's Degree Program</p>
+                <ul>
+                    <li>Majoring in Performing Arts</li>
+                    <li>GPA: 3.8/4.0</li>
+                </ul>
+            </div>
+        </div>
     </section>
 
     <section>
-        <h2>Contact</h2>
-        <p>Email: <a href="mailto:@gamil.com">@gamil.com</a></p>
+        <h2><i class="fas fa-envelope"></i> Contact</h2>
+        <div class="contact-info">
+            <p>📧 <a href="mailto:alen.performance@example.com" style="color: var(--secondary);">alen.performance@example.com</a></p>
+        </div>
         <form class="contact-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-
-            <button type="submit">Send Message</button>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea rows="5" placeholder="Your Message..." required></textarea>
+            <button type="submit">Send Message <i class="fas fa-paper-plane"></i></button>
         </form>
     </section>
 </div>
