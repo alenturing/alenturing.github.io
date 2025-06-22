@@ -1,1 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字减法计算器</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.93);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .description {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .input-container {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #444;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(37, 117, 252, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .result-container {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #2575fc;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .result {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .formula {
+            color: #666;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-weight: 500;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        
+        .example {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: 10px;
+            color: #2c3e50;
+        }
+        
+        .example h3 {
+            margin-bottom: 10px;
+            color: #2575fc;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .result {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>数字减法计算器</h1>
+        
+        <p class="description">
+            在下方输入任意数字，计算器将立即计算并显示该数字减去15的结果。
+        </p>
+        
+        <div class="input-container">
+            <label for="numberInput">请输入一个数字：</label>
+            <input type="number" id="numberInput" placeholder="例如：25" step="any">
+        </div>
+        
+        <button id="calculateBtn">计算减去15的结果</button>
+        
+        <div class="result-container">
+            <div id="result" class="result">0</div>
+            <div id="formula" class="formula">输入数字后查看计算结果</div>
+            <div id="error" class="error"></div>
+        </div>
+        
+        <div class="example">
+            <h3>计算示例：</h3>
+            <p>输入 30 → 30 - 15 = 15</p>
+            <p>输入 42.5 → 42.5 - 15 = 27.5</p>
+            <p>输入 -10 → -10 - 15 = -25</p>
+        </div>
+        
+        <p class="footer">
+            提示：可以输入整数或小数，支持正数和负数。
+        </p>
+    </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('numberInput');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resultDisplay = document.getElementById('result');
+            const formulaDisplay = document.getElementById('formula');
+            const errorDisplay = document.getElementById('error');
+            
+            // 初始示例
+            updateResult(0);
+            
+            // 计算按钮点击事件
+            calculateBtn.addEventListener('click', calculate);
+            
+            // 输入框回车事件
+            input.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    calculate();
+                }
+            });
+            
+            function calculate() {
+                errorDisplay.textContent = '';
+                
+                // 获取输入值
+                const inputValue = input.value.trim();
+                
+                // 检查是否为空
+                if (inputValue === '') {
+                    errorDisplay.textContent = '请输入一个数字';
+                    return;
+                }
+                
+                // 转换为数字
+                const number = parseFloat(inputValue);
+                
+                // 检查是否为有效数字
+                if (isNaN(number)) {
+                    errorDisplay.textContent = '请输入有效的数字';
+                    return;
+                }
+                
+                // 计算结果
+                const result = number - 15;
+                
+                // 更新显示
+                updateResult(result);
+                
+                // 显示计算过程
+                formulaDisplay.textContent = `${number} - 15 = ${result}`;
+            }
+            
+            function updateResult(value) {
+                resultDisplay.textContent = value;
+                
+                // 根据结果值设置颜色
+                if (value > 0) {
+                    resultDisplay.style.color = '#27ae60'; // 正数为绿色
+                } else if (value < 0) {
+                    resultDisplay.style.color = '#e74c3c'; // 负数为红色
+                } else {
+                    resultDisplay.style.color = '#333'; // 零为黑色
+                }
+            }
+        });
+    </script>
+</body>
+</html>
