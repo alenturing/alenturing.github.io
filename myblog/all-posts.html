@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>所有文章 - Alen的博客</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      padding: 20px;
+      background: #3498db;
+      color: #fff;
+      text-align: center;
+    }
+    header h1 { margin: 0; }
+    header input.search {
+      margin-top: 15px;
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 25px;
+      border: none;
+      font-size: 1em;
+    }
+    .container { padding: 20px; max-width: 1100px; margin: auto; }
+    .filters { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    .filters select { padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; font-size: 0.9em; }
+    .month-label { font-size: 1.2em; font-weight: bold; margin: 20px 0 10px 0; color: #555; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+    .card h3 a { text-decoration: none; color: #2c3e50; }
+    .card h3 a:hover { color: #3498db; }
+    .tag { display: inline-block; background: #16a085; color: #fff; padding: 3px 10px; border-radius: 10px; font-size: 0.8em; margin-bottom: 10px; }
+    .meta { font-size: 0.85em; color: #777; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Alen的所有文章</h1>
+    <input class="search" id="allPostSearch" type="search" placeholder="搜索文章..." />
+  </header>
+
+  <main class="container">
+    <div class="filters">
+      <div>
+        <label>按标签筛选: </label>
+        <select id="tagFilter">
+          <option value="all">全部</option>
+          <option value="个人">个人</option>
+          <option value="效率">技术</option>
+          <option value="项目">项目</option>
+        </select>
+      </div>
+      <div>
+        <label>按时间排序: </label>
+        <select id="sortOrder">
+          <option value="desc">最新优先</option>
+          <option value="asc">最早优先</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="allPostGrid">
+      <!-- 文章卡片由JS动态插入并分月份显示 -->
+    </div>
+  </main>
+
+  <script>
+    const searchInput = document.getElementById('allPostSearch');
+    const tagFilter = document.getElementById('tagFilter');
+    const sortOrder = document.getElementById('sortOrder');
+    const grid = document.getElementById('allPostGrid');
+
+    // 示例文章数据
+    const postsData = [
+      {title:"第一篇个人博客", tag:"个人", date:"2026-05-20", desc:"这是我搭建网站之后发布的第一篇博客。", url:"posts/2026-05-20-my-first-blog.html"},
+      {title:"我的web的搭建", tag:"技术", date:"2026-05-12", desc:"如何把零散信息转化为可复用的笔记、文章和项目素材。", url:"posts/2026-05-12-myweb.html"},
+      {title:"一次小项目的复盘", tag:"项目", date:"2026-04-28", desc:"记录需求拆解、技术选择、实现过程和上线后发现的问题。", url:"posts/2026-04-28-project-review.html"}
+    ];
+
+    function renderPosts() {
+      const keyword = searchInput.value.toLowerCase();
+      const selectedTag = tagFilter.value;
+      const order = sortOrder.value;
+
+      // 过滤
+      let filtered = postsData.filter(post => {
+        const matchKeyword = post.title.toLowerCase().includes(keyword) || post.desc.toLowerCase().includes(keyword);
+        const matchTag = selectedTag === 'all' || post.tag === selectedTag;
+        return matchKeyword && matchTag;
+      });
+
+      // 排序
+      filtered.sort((a,b)=>{
+        return order === 'asc' ? new Date(a.date)-new Date(b.date) : new Date(b.date)-new Date(a.date);
+      });
+
+      // 清空grid
+      grid.innerHTML = '';
+
+      // 按月份分组
+      let currentMonth = '';
+      filtered.forEach(post=>{
+        const month = post.date.slice(0,7); // YYYY-MM
+        if(month !== currentMonth){
+          const monthDiv = document.createElement('div');
+          monthDiv.className='month-label';
+          monthDiv.textContent = month;
+          grid.appendChild(monthDiv);
+          currentMonth = month;
+        }
+        const card = document.createElement('div');
+        card.className='card';
+        card.innerHTML = `<h3><a href="${post.url}" target="_blank">${post.title}</a></h3>
+                          <span class="tag">${post.tag}</span>
+                          <p>${post.desc}</p>
+                          <div class="meta">${post.date}</div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    searchInput.addEventListener('input', renderPosts);
+    tagFilter.addEventListener('change', renderPosts);
+    sortOrder.addEventListener('change', renderPosts);
+
+    renderPosts();
+  </script>
+</body>
+</html>
