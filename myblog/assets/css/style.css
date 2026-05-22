@@ -1,0 +1,91 @@
+/* assets/css/style.css */
+
+/* 全局样式 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+h1, h2, h3 {
+    color: #2c3e50;
+}
+
+/* 首页文章卡片 */
+.card {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+.card .meta {
+    color: #777;
+    font-size: 0.9em;
+    margin-top: 8px;
+}
+
+/* 文章内容样式 */
+.post-content {
+    line-height: 1.7;
+    font-size: 16px;
+    margin-top: 15px;
+}
+.post-content h2 {
+    margin-top: 20px;
+    color: #2c3e50;
+}
+.post-content p {
+    margin-bottom: 12px;
+}
+
+/* 阅读更多按钮 */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 15px;
+    border-radius: 25px;
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+}
+.button:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* 页脚 */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 15px 0;
+    color: #555;
+    font-size: 0.9em;
+}
+
+/* 响应式调整 */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    .card {
+        padding: 15px;
+    }
+}
