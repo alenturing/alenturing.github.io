@@ -4,140 +4,277 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>所有文章 - Alen的博客</title>
-  <link rel="stylesheet" href="assets/css/style.css">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f0f2f5;
-      color: #333;
-      margin: 0;
-      padding: 0;
+      color: #1e2a3e;
+      line-height: 1.6;
     }
-    header {
-      padding: 20px;
-      background: #3498db;
-      color: #fff;
+
+    /* 头部 - 缩小版 */
+    .hero-header {
+      background: linear-gradient(135deg, #3498db, #1e3a8a);
+      color: white;
+      padding: 1.5rem 1rem;   /* 原来是 3rem 1rem，现在缩小一半 */
       text-align: center;
-    }
-    header h1 { margin: 0; }
-    header input.search {
-      margin-top: 15px;
-      padding: 10px;
-      width: 80%;
-      max-width: 400px;
-      border-radius: 25px;
-      border: none;
-      font-size: 1em;
-    }
-    .container { padding: 20px; max-width: 1100px; margin: auto; }
-    .filters { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-    .filters select { padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; font-size: 0.9em; }
-    .month-label { font-size: 1.2em; font-weight: bold; margin: 20px 0 10px 0; color: #555; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
+      border-bottom-left-radius: 1.5rem;
+      border-bottom-right-radius: 1.5rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .hero-header h1 {
+      font-size: 1.8rem;      /* 原来是 2.5rem，缩小 */
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+    .hero-header p {
+      opacity: 0.9;
+      font-size: 0.9rem;      /* 稍微缩小 */
+      margin-top: 0.25rem;
+    }
+    .search-bar {
+      margin-top: 1rem;       /* 缩小间距 */
+    }
+    .search-bar input {
+      width: 80%;
+      max-width: 500px;
+      padding: 10px 18px;     /* 稍微减小内边距 */
+      border-radius: 40px;
+      border: none;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      outline: none;
+      transition: 0.2s;
+    }
+    .search-bar input:focus {
+      box-shadow: 0 0 0 3px rgba(52,152,219,0.3);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 1.5rem auto;   /* 减小上边距 */
+      padding: 0 1rem;
+    }
+
+    /* 筛选栏 */
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    .filters label {
+      font-weight: 600;
+      margin-right: 0.5rem;
+      color: #2c3e50;
+    }
+    .filters select {
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+    }
+
+    /* 月份分组标题 */
+    .month-group {
+      margin-bottom: 1.5rem;
+    }
+    .month-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin: 1rem 0 0.8rem 0.5rem;
+      padding-left: 0.8rem;
+      border-left: 4px solid #3498db;
+      color: #2c3e50;
+    }
+
+    /* 卡片网格 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+    }
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       transition: transform 0.2s, box-shadow 0.2s;
     }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
-    .card h3 a { text-decoration: none; color: #2c3e50; }
-    .card h3 a:hover { color: #3498db; }
-    .tag { display: inline-block; background: #16a085; color: #fff; padding: 3px 10px; border-radius: 10px; font-size: 0.8em; margin-bottom: 10px; }
-    .meta { font-size: 0.85em; color: #777; margin-top: 10px; }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin: 0 0 0.4rem;
+    }
+    .card h3 a {
+      text-decoration: none;
+      color: #1e293b;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .card h3 a:hover {
+      color: #3498db;
+    }
+    .tag {
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      padding: 0.15rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+    .card p {
+      color: #475569;
+      font-size: 0.85rem;
+      margin: 0.6rem 0;
+      line-height: 1.4;
+    }
+    .meta {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.6rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #64748b;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 1.5rem;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Alen的所有文章</h1>
-    <input class="search" id="allPostSearch" type="search" placeholder="搜索文章..." />
-  </header>
 
-  <main class="container">
-    <div class="filters">
-      <div>
-        <label>按标签筛选: </label>
-        <select id="tagFilter">
-          <option value="all">全部</option>
-          <option value="个人">个人</option>
-          <option value="效率">技术</option>
-          <option value="项目">项目</option>
-        </select>
-      </div>
-      <div>
-        <label>按时间排序: </label>
-        <select id="sortOrder">
-          <option value="desc">最新优先</option>
-          <option value="asc">最早优先</option>
-        </select>
-      </div>
+<div class="hero-header">
+  <h1>Alen的所有文章</h1>
+  <p>Alen's All Posts, welcome!</p>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="🔍 搜索标题或内容..." autocomplete="off">
+  </div>
+</div>
+
+<div class="container">
+  <div class="filters">
+    <div>
+      <label>类别标签：</label>
+      <select id="tagFilter"></select>
     </div>
-
-    <div id="allPostGrid">
-      <!-- 文章卡片由JS动态插入并分月份显示 -->
+    <div>
+      <label>日期排序：</label>
+      <select id="sortOrder">
+        <option value="desc">最新优先</option>
+        <option value="asc">最早优先</option>
+      </select>
     </div>
-  </main>
+  </div>
 
-  <script>
-    const searchInput = document.getElementById('allPostSearch');
-    const tagFilter = document.getElementById('tagFilter');
-    const sortOrder = document.getElementById('sortOrder');
-    const grid = document.getElementById('allPostGrid');
+  <div id="postsContainer"></div>
+</div>
 
-    // 示例文章数据
-    const postsData = [
-      {title:"第一篇个人博客", tag:"个人", date:"2026-05-20", desc:"这是我搭建网站之后发布的第一篇博客。", url:"posts/2026-05-20-my-first-blog.html"},
-      {title:"我的web的搭建", tag:"技术", date:"2026-05-12", desc:"如何把零散信息转化为可复用的笔记、文章和项目素材。", url:"posts/2026-05-12-myweb.html"},
-      {title:"一次小项目的复盘", tag:"项目", date:"2026-04-28", desc:"记录需求拆解、技术选择、实现过程和上线后发现的问题。", url:"posts/2026-04-28-project-review.html"}
-    ];
+<footer>
+  <p>© 2026 Alen Turing · enjoy life</p>
+</footer>
 
-    function renderPosts() {
-      const keyword = searchInput.value.toLowerCase();
-      const selectedTag = tagFilter.value;
-      const order = sortOrder.value;
+<script>
+  // ======================== 你只需要修改这个数组 ========================
+  const postsData = [
+    { title: "第一篇个人博客", tag: "个人", date: "2026-05-20", desc: "这是我搭建网站之后发布的第一篇博客。", url: "posts/2026-05-20-my-first-blog.html" },
+    { title: "我的web的搭建", tag: "技术", date: "2026-05-23", desc: "如何从0开始搭建自己的网站。", url: "posts/2026-05-23-myweb.html" },
+    { title: "关于项目开发", tag: "项目", date: "2026-04-22", desc: "记录我从一个想法开始到实现的全过程。", url: "posts/2026-04-22-project.html" }
+  ];
+  // ====================================================================
 
-      // 过滤
-      let filtered = postsData.filter(post => {
-        const matchKeyword = post.title.toLowerCase().includes(keyword) || post.desc.toLowerCase().includes(keyword);
-        const matchTag = selectedTag === 'all' || post.tag === selectedTag;
-        return matchKeyword && matchTag;
-      });
+  function getAllTags() {
+    const tagsSet = new Set();
+    postsData.forEach(post => {
+      if (post.tag) tagsSet.add(post.tag);
+    });
+    return Array.from(tagsSet).sort();
+  }
 
-      // 排序
-      filtered.sort((a,b)=>{
-        return order === 'asc' ? new Date(a.date)-new Date(b.date) : new Date(b.date)-new Date(a.date);
-      });
+  function renderTagFilter() {
+    const tagSelect = document.getElementById('tagFilter');
+    const allTags = getAllTags();
+    tagSelect.innerHTML = '<option value="all">全部</option>';
+    allTags.forEach(tag => {
+      const option = document.createElement('option');
+      option.value = tag;
+      option.textContent = tag;
+      tagSelect.appendChild(option);
+    });
+  }
 
-      // 清空grid
-      grid.innerHTML = '';
+  function renderPosts() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    const selectedTag = document.getElementById('tagFilter').value;
+    const sortOrder = document.getElementById('sortOrder').value;
 
-      // 按月份分组
-      let currentMonth = '';
-      filtered.forEach(post=>{
-        const month = post.date.slice(0,7); // YYYY-MM
-        if(month !== currentMonth){
-          const monthDiv = document.createElement('div');
-          monthDiv.className='month-label';
-          monthDiv.textContent = month;
-          grid.appendChild(monthDiv);
-          currentMonth = month;
-        }
-        const card = document.createElement('div');
-        card.className='card';
-        card.innerHTML = `<h3><a href="${post.url}" target="_blank">${post.title}</a></h3>
-                          <span class="tag">${post.tag}</span>
-                          <p>${post.desc}</p>
-                          <div class="meta">${post.date}</div>`;
-        grid.appendChild(card);
-      });
+    let filtered = postsData.filter(post => {
+      const matchKeyword = post.title.toLowerCase().includes(keyword) || post.desc.toLowerCase().includes(keyword);
+      const matchTag = selectedTag === 'all' || post.tag === selectedTag;
+      return matchKeyword && matchTag;
+    });
+
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
+    const groups = new Map();
+    filtered.forEach(post => {
+      const monthKey = post.date.slice(0, 7);
+      if (!groups.has(monthKey)) groups.set(monthKey, []);
+      groups.get(monthKey).push(post);
+    });
+
+    const container = document.getElementById('postsContainer');
+    if (filtered.length === 0) {
+      container.innerHTML = '<div style="text-align:center; padding:2rem; color:#666;">没有找到相关文章</div>';
+      return;
     }
 
-    searchInput.addEventListener('input', renderPosts);
-    tagFilter.addEventListener('change', renderPosts);
-    sortOrder.addEventListener('change', renderPosts);
+    const sortedMonths = Array.from(groups.keys()).sort().reverse();
+    let html = '';
+    sortedMonths.forEach(month => {
+      const posts = groups.get(month);
+      html += `<div class="month-group"><div class="month-title">${month}</div><div class="grid">`;
+      posts.forEach(post => {
+        html += `
+          <div class="card">
+            <span class="tag">${post.tag}</span>
+            <h3><a href="${post.url}" target="_blank">${post.title}</a></h3>
+            <p>${post.desc}</p>
+            <div class="meta">${post.date}</div>
+          </div>
+        `;
+      });
+      html += `</div></div>`;
+    });
+    container.innerHTML = html;
+  }
 
-    renderPosts();
-  </script>
+  document.getElementById('searchInput').addEventListener('input', renderPosts);
+  document.getElementById('tagFilter').addEventListener('change', renderPosts);
+  document.getElementById('sortOrder').addEventListener('change', renderPosts);
+
+  renderTagFilter();
+  renderPosts();
+</script>
 </body>
 </html>
