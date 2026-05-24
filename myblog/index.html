@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <link rel="icon" type="image/x-icon" href="myblog/assets/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="{{ '/assets/favicon.ico' | relative_url }}">
+  <!-- 如果你的站点不在子目录，也可以直接用下面这一行（注释上一行） -->
+  <!-- <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"> -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="一个简洁、响应式的个人博客首页，适合部署到 GitHub Pages。" />
@@ -19,6 +21,8 @@
       --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
       --radius: 22px;
       --max: 1120px;
+      --tag-bg: #eef2ff;
+      --tag-text: #1e40af;
     }
 
     [data-theme="dark"] {
@@ -31,6 +35,8 @@
       --accent: #60a5fa;
       --accent-2: #93c5fd;
       --shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+      --tag-bg: #2d3a5e;
+      --tag-text: #cbd5e6;
     }
 
     * {
@@ -285,7 +291,40 @@
       gap: 18px;
     }
 
-    .card {
+    /* 修复暗黑模式卡片样式：移除内联硬编码，使用CSS变量 */
+    .post-card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+    .post-card:hover {
+      transform: translateY(-4px);
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+      background: var(--surface);
+    }
+    .post-card .tag {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.8em;
+      margin-bottom: 10px;
+    }
+    .post-card h3 a {
+      text-decoration: none;
+      color: var(--text);
+    }
+    .post-card .meta {
+      color: var(--muted);
+      font-size: 0.85em;
+      margin-top: 10px;
+    }
+    /* 保留原来的通用卡片样式（给其他区域用） */
+    .card:not(.post-card) {
       border: 1px solid var(--border);
       background: var(--surface);
       border-radius: var(--radius);
@@ -293,8 +332,7 @@
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
       transition: transform 180ms ease, border-color 180ms ease;
     }
-
-    .card:hover {
+    .card:not(.post-card):hover {
       transform: translateY(-4px);
       border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
     }
@@ -509,42 +547,43 @@
     </header>
 
     <section id="posts">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <h2>最新文章</h2>
-        <p>这里展示我置顶的三篇文章</p>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>最新文章</h2>
+            <p>这里展示我置顶的三篇文章</p>
+          </div>
+          <input class="search" id="postSearch" type="search" placeholder="搜索文章关键词..." aria-label="搜索文章" />
+        </div>
+
+        <div class="grid" id="postGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top:20px;">
+          <!-- 三篇卡片已移除硬编码内联样式，改为使用 .post-card 类，深色模式自动适配 -->
+          <article class="post-card" data-title="第一篇个人博客" data-tag="个人">
+            <span class="tag">个人</span>
+            <h3><a href="posts/2026-05-20-my-first-blog.html" target="_blank">第一篇个人博客</a></h3>
+            <p>这是我搭建网站之后发布的第一篇个人博客。</p>
+            <div class="meta"><span>2026-05-20</span> · <span>3 min read</span></div>
+          </article>
+
+          <article class="post-card" data-title="我的web的搭建" data-tag="技术">
+            <span class="tag">技术</span>
+            <h3><a href="posts/2026-05-23-myweb.html" target="_blank">我的web的搭建</a></h3>
+            <p>如何搭建一个属于自己的个人网站。</p>
+            <div class="meta"><span>2026-05-23</span> · <span>5 min read</span></div>
+          </article>
+
+          <article class="post-card" data-title="关于项目开发" data-tag="项目">
+            <span class="tag">项目</span>
+            <h3><a href="posts/2026-04-22-project.html" target="_blank">关于项目开发</a></h3>
+            <p>记录我从一个想法开始到实现的全过程。</p>
+            <div class="meta"><span>2026-04-22</span> · <span>6 min read</span></div>
+          </article>
+        </div>
+
+        <div class="actions" style="margin-top:30px; text-align:center;">
+          <a class="button primary" href="all-posts.html" target="_blank" style="display:inline-block; padding:12px 25px; border-radius:25px; background:#3498db; color:#fff; font-weight:bold; text-decoration:none; transition:0.3s;">阅读更多文章</a>
+        </div>
       </div>
-      <input class="search" id="postSearch" type="search" placeholder="搜索文章关键词..." aria-label="搜索文章" />
-    </div>
-
-    <div class="grid" id="postGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top:20px;">
-      <article class="card" data-title="第一篇个人博客" data-tag="个人" style="background:#fff; border-radius:12px; padding:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-        <span class="tag" style="display:inline-block; background:#3498db; color:#fff; padding:4px 10px; border-radius:8px; font-size:0.8em; margin-bottom:10px;">个人</span>
-        <h3><a href="posts/2026-05-20-my-first-blog.html" target="_blank" style="text-decoration:none; color:#2c3e50;">第一篇个人博客</a></h3>
-        <p>这是我搭建网站之后发布的第一篇个人博客。</p>
-        <div class="meta" style="color:#777; font-size:0.85em; margin-top:10px;"><span>2026-05-20</span> · <span>3 min read</span></div>
-      </article>
-
-      <article class="card" data-title="我的web的搭建" data-tag="技术" style="background:#fff; border-radius:12px; padding:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-        <span class="tag" style="display:inline-block; background:#16a085; color:#fff; padding:4px 10px; border-radius:8px; font-size:0.8em; margin-bottom:10px;">技术</span>
-        <h3><a href="posts/2026-05-12-myweb.html" target="_blank" style="text-decoration:none; color:#2c3e50;">我的web的搭建</a></h3>
-        <p>如何搭建一个属于自己的个人网站。</p>
-        <div class="meta" style="color:#777; font-size:0.85em; margin-top:10px;"><span>2026-05-12</span> · <span>5 min read</span></div>
-      </article>
-
-      <article class="card" data-title="一次小项目的复盘" data-tag="项目" style="background:#fff; border-radius:12px; padding:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
-        <span class="tag" style="display:inline-block; background:#e67e22; color:#fff; padding:4px 10px; border-radius:8px; font-size:0.8em; margin-bottom:10px;">项目</span>
-        <h3><a href="posts/2026-04-28-project-review.html" target="_blank" style="text-decoration:none; color:#2c3e50;">一次小项目的复盘</a></h3>
-        <p>记录需求拆解、技术选择、实现过程和上线后发现的问题。</p>
-        <div class="meta" style="color:#777; font-size:0.85em; margin-top:10px;"><span>2026-04-28</span> · <span>6 min read</span></div>
-      </article>
-    </div>
-
-    <div class="actions" style="margin-top:30px; text-align:center;">
-      <a class="button primary" href="all-posts.html" target="_blank" style="display:inline-block; padding:12px 25px; border-radius:25px; background:#3498db; color:#fff; font-weight:bold; text-decoration:none; transition:0.3s;">阅读更多文章</a>
-    </div>
-  </div>
     </section>
 
     <section id="about">
@@ -646,7 +685,7 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const searchInput = document.getElementById('postSearch');
-    const cards = Array.from(document.querySelectorAll('#postGrid .card'));
+    const cards = Array.from(document.querySelectorAll('#postGrid .post-card'));
 
     searchInput.addEventListener('input', (event) => {
       const keyword = event.target.value.trim().toLowerCase();
