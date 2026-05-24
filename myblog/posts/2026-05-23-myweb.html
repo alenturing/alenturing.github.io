@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>我的Web搭建之旅 | Alen's blog</title>
+    <style>
+        /* ========== 完整精美样式 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #1e2a3e;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #1f6f8b;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            border-left: 5px solid #3498db;
+            padding-left: 1rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.8rem 0;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.03);
+        }
+
+        .meta {
+            display: flex;
+            gap: 1.2rem;
+            color: #5b6e8c;
+            font-size: 0.9rem;
+            margin: 0.75rem 0 1.25rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #e2e8f0;
+            flex-wrap: wrap;
+        }
+        .meta span {
+            background: #f1f5f9;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .meta .date-icon::before {
+            content: "📅";
+            margin-right: 4px;
+        }
+        .meta .category-icon::before {
+            content: "🏷️";
+            margin-right: 4px;
+        }
+
+        .post-content {
+            line-height: 1.7;
+            font-size: 1rem;
+            color: #1e2f3e;
+        }
+        .post-content p {
+            margin-bottom: 1rem;
+        }
+        .post-content ul, .post-content ol {
+            margin: 0.8rem 0 1.2rem 1.8rem;
+        }
+        .post-content li {
+            margin: 0.6rem 0;
+        }
+        .post-content strong {
+            color: #1e4668;
+            font-weight: 600;
+        }
+        .post-content blockquote {
+            margin: 1.5rem 0;
+            padding: 0.8rem 1.2rem;
+            background: #f8fafc;
+            border-left: 5px solid #3498db;
+            border-radius: 12px;
+            color: #2c3e50;
+            font-style: normal;
+            font-weight: 400;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .post-content blockquote p {
+            margin-bottom: 0;
+        }
+        .post-content ul {
+            list-style-type: none;
+            padding-left: 0.2rem;
+        }
+        .post-content ul li {
+            position: relative;
+            padding-left: 1.6rem;
+            margin-bottom: 0.7rem;
+        }
+        .post-content ul li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-size: 0.9rem;
+        }
+        .post-content h2 {
+            display: inline-block;
+            background: linear-gradient(90deg, #eef2ff, transparent);
+            padding-right: 1rem;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 22px;
+            margin-top: 20px;
+            border-radius: 40px;
+            background-color: #3498db;
+            color: white;
+            font-weight: 500;
+            transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+        }
+        .button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.2);
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.2rem 0;
+            color: #5c6f87;
+            font-size: 0.85rem;
+            border-top: 1px solid #dee4ed;
+            background: transparent;
+        }
+        footer a {
+            color: #3b82f6;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+                margin: 15px auto;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+            .meta {
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>我的Web搭建之旅</h1>
+    <div class="meta">
+        <span class="date-icon">2026年05月23日</span>
+        
+        <span class="category-icon">技术</span>
+        
+        <span>Alen</span>
+    </div>
+    <div class="post-content">
+        <h2 id="建立个人网页的初心">建立个人网页的初心</h2>
+
+<ul>
+  <li><strong>实现想法</strong>: 关于我建立自己个人web，大约在我中学时期就已经有了相关的想法，因为种种原因一直没有落实。直到大学参加挑战杯项目时，因为项目需求队友合作创建了一个网页，在那之后我创建个人Web的想法更加深刻，直到现在我终于创建了个人的Web，也算是实现了个人的小愿望了。</li>
+  <li><strong>学习技术</strong>: 创建这个网页的目的主要还是为了自学各种技术，最基础的包括前端，同时借助AI等技术加速我的学习，让我不断进行探索未知的领域。</li>
+  <li><strong>记录思考</strong>: 最后就是这个网页，我也会经常进行发布更新，持续记录个人的思考和感受 😊</li>
+</ul>
+
+<h2 id="关于网页的说明">关于网页的说明</h2>
+
+<ul>
+  <li>网页全部由我个人进行维护发布</li>
+  <li>本人正在学习前端部署，以及其它相关方面的知识</li>
+  <li>未来会逐步加入后端交互及数据库功能</li>
+</ul>
+
+<h2 id="致谢">致谢</h2>
+
+<ul>
+  <li>尤其感谢 <strong>GitHub</strong> 提供的免费服务器</li>
+  <li>其次感谢 <strong>ChatGPT</strong> 等AI辅助编程</li>
+  <li>也感谢开源社区提供的各类优秀工具</li>
+</ul>
+
+<blockquote>
+  <p>写在最后，这个网页的文件夹大约在去年3月份进行开展部署，后续几次更新使得网站完善，后续进行经常性更新。</p>
+</blockquote>
+
+    </div>
+
+</div>
+
+<footer>
+    <p> Alen Turing · 基于 GitHub Pages 部署 · 持续发布 </p>
+    <p>© 2025 - 2026 Alen's blog |  <a href="about.html">About me</a> | 最后更新 2026.05</p>
+</footer>
+
+</body>
+</html>
