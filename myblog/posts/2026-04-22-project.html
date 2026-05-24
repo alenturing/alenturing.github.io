@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>关于项目开发 | Alen's blog</title>
+    <style>
+        /* ========== 完整精美样式 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #1e2a3e;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #1f6f8b;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            border-left: 5px solid #3498db;
+            padding-left: 1rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.8rem 0;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.03);
+        }
+
+        .meta {
+            display: flex;
+            gap: 1.2rem;
+            color: #5b6e8c;
+            font-size: 0.9rem;
+            margin: 0.75rem 0 1.25rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #e2e8f0;
+            flex-wrap: wrap;
+        }
+        .meta span {
+            background: #f1f5f9;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .meta .date-icon::before {
+            content: "📅";
+            margin-right: 4px;
+        }
+        .meta .category-icon::before {
+            content: "🏷️";
+            margin-right: 4px;
+        }
+
+        .post-content {
+            line-height: 1.7;
+            font-size: 1rem;
+            color: #1e2f3e;
+        }
+        .post-content p {
+            margin-bottom: 1rem;
+        }
+        .post-content ul, .post-content ol {
+            margin: 0.8rem 0 1.2rem 1.8rem;
+        }
+        .post-content li {
+            margin: 0.6rem 0;
+        }
+        .post-content strong {
+            color: #1e4668;
+            font-weight: 600;
+        }
+        .post-content blockquote {
+            margin: 1.5rem 0;
+            padding: 0.8rem 1.2rem;
+            background: #f8fafc;
+            border-left: 5px solid #3498db;
+            border-radius: 12px;
+            color: #2c3e50;
+            font-style: normal;
+            font-weight: 400;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .post-content blockquote p {
+            margin-bottom: 0;
+        }
+        .post-content ul {
+            list-style-type: none;
+            padding-left: 0.2rem;
+        }
+        .post-content ul li {
+            position: relative;
+            padding-left: 1.6rem;
+            margin-bottom: 0.7rem;
+        }
+        .post-content ul li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-size: 0.9rem;
+        }
+        .post-content h2 {
+            display: inline-block;
+            background: linear-gradient(90deg, #eef2ff, transparent);
+            padding-right: 1rem;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 22px;
+            margin-top: 20px;
+            border-radius: 40px;
+            background-color: #3498db;
+            color: white;
+            font-weight: 500;
+            transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+        }
+        .button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.2);
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.2rem 0;
+            color: #5c6f87;
+            font-size: 0.85rem;
+            border-top: 1px solid #dee4ed;
+            background: transparent;
+        }
+        footer a {
+            color: #3b82f6;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+                margin: 15px auto;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+            .meta {
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>关于项目开发</h1>
+    <div class="meta">
+        <span class="date-icon">2026年04月22日</span>
+        
+        <span class="category-icon">项目</span>
+        
+        <span>Alen</span>
+    </div>
+    <div class="post-content">
+        <h2 id="为什么要自己开发一些项目">为什么要自己开发一些项目</h2>
+
+<ul>
+  <li><strong>点子的产生</strong>: 有些时候我会因为做事情效率慢，或者经常重复性的事情让我萌生了一些自己创造“工具”加速解决问题的想法</li>
+  <li><strong>为了自主学习</strong>: 自己去开发项目，是一个艰难的过程，毕竟不是相关背景的专业人员，还好在目前能借助各种工具进行快速的入门学习</li>
+</ul>
+
+<h2 id="开发一个项目的心路历程">开发一个项目的心路历程</h2>
+
+<ul>
+  <li>首先我第一个真正去开发项目是OutBrain，基于Python进行编写，打包整合。这个整个过程从最初计划的设想去制作一个针对具体场景定制化的回复内容，然后利用Python进行相关库的下载，安装；以及再之后对于API的申请，调用等等。整个开发的过程完全从0开始，制作完一个项目是很快乐的，这种即时成就感让我感觉收获很大，也很有乐趣，每次都能体会到学习和解决问题带来的快乐。</li>
+</ul>
+
+<h2 id="最后">最后</h2>
+
+<ul>
+  <li>后续打算根据之前想到的好的想法再去设计一些更为好用的项目工具，包括网页端，桌面端和移动端</li>
+</ul>
+
+<blockquote>
+  <p>后续会进行学习相关的Android-studio等软件</p>
+</blockquote>
+
+    </div>
+
+</div>
+
+<footer>
+    <p> Alen Turing · 基于 GitHub Pages 部署 · 持续发布 </p>
+    <p>© 2025 - 2026 Alen's blog |  <a href="about.html">About me</a> | 最后更新 2026.05</p>
+</footer>
+
+</body>
+</html>
