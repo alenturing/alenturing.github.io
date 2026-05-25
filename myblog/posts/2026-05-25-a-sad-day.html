@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>略微伤心的一天 | Alen's blog</title>
+    <style>
+        /* ========== 完整精美样式 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #1e2a3e;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #1f6f8b;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            border-left: 5px solid #3498db;
+            padding-left: 1rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.8rem 0;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.03);
+        }
+
+        .meta {
+            display: flex;
+            gap: 1.2rem;
+            color: #5b6e8c;
+            font-size: 0.9rem;
+            margin: 0.75rem 0 1.25rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #e2e8f0;
+            flex-wrap: wrap;
+        }
+        .meta span {
+            background: #f1f5f9;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .meta .date-icon::before {
+            content: "📅";
+            margin-right: 4px;
+        }
+        .meta .category-icon::before {
+            content: "🏷️";
+            margin-right: 4px;
+        }
+
+        .post-content {
+            line-height: 1.7;
+            font-size: 1rem;
+            color: #1e2f3e;
+        }
+        .post-content p {
+            margin-bottom: 1rem;
+        }
+        .post-content ul, .post-content ol {
+            margin: 0.8rem 0 1.2rem 1.8rem;
+        }
+        .post-content li {
+            margin: 0.6rem 0;
+        }
+        .post-content strong {
+            color: #1e4668;
+            font-weight: 600;
+        }
+        .post-content blockquote {
+            margin: 1.5rem 0;
+            padding: 0.8rem 1.2rem;
+            background: #f8fafc;
+            border-left: 5px solid #3498db;
+            border-radius: 12px;
+            color: #2c3e50;
+            font-style: normal;
+            font-weight: 400;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .post-content blockquote p {
+            margin-bottom: 0;
+        }
+        .post-content ul {
+            list-style-type: none;
+            padding-left: 0.2rem;
+        }
+        .post-content ul li {
+            position: relative;
+            padding-left: 1.6rem;
+            margin-bottom: 0.7rem;
+        }
+        .post-content ul li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-size: 0.9rem;
+        }
+        .post-content h2 {
+            display: inline-block;
+            background: linear-gradient(90deg, #eef2ff, transparent);
+            padding-right: 1rem;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 22px;
+            margin-top: 20px;
+            border-radius: 40px;
+            background-color: #3498db;
+            color: white;
+            font-weight: 500;
+            transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+        }
+        .button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.2);
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.2rem 0;
+            color: #5c6f87;
+            font-size: 0.85rem;
+            border-top: 1px solid #dee4ed;
+            background: transparent;
+        }
+        footer a {
+            color: #3b82f6;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+                margin: 15px auto;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+            .meta {
+                gap: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>略微伤心的一天</h1>
+    <div class="meta">
+        <span class="date-icon">2026年05月25日</span>
+        
+        <span class="category-icon">个人</span>
+        
+        <span>Alen</span>
+    </div>
+    <div class="post-content">
+        <h2 id="略感伤心">略感伤心</h2>
+
+<ul>
+  <li>因为某些肯定会发生，而且已经提前直到结果会发生的事情，最终还是如期而至的发生了，总感觉非常的惆怅。总的来说是略感伤心，也没有那么伤心</li>
+</ul>
+
+<h2 id="未来规划">未来规划</h2>
+
+<ul>
+  <li>加油努力，脚踏实地</li>
+  <li>制定目标，学习方面和工作方面上的双重目标</li>
+  <li>严格自律：生活作息上的自律，饮食时间和内容的自律，认真锻炼上的自律</li>
+</ul>
+
+<h2 id="拒绝内耗">拒绝内耗</h2>
+
+<ul>
+  <li>行动拒绝内耗</li>
+  <li>自律对抗内耗</li>
+</ul>
+
+<blockquote>
+  <p>为了下半年将持续努力，立下一个一年后的约定，一年后我翻看这个帖子会变得怎么样，我很期待！</p>
+</blockquote>
+
+    </div>
+
+</div>
+
+<footer>
+    <p> Alen Turing · 基于 GitHub Pages 部署 · 持续发布 </p>
+    <p>© 2025 - 2026 Alen's blog |  <a href="about.html">About me</a> | 最后更新 2026.05</p>
+</footer>
+
+</body>
+</html>
