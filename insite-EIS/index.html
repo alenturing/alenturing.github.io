@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content=" CHI660 原位 EIS 宏命令生成器：设置开路电位起始、多段电位扫描，预览并下载 TXT 宏。">
+<title>CHI660 · 原位 EIS 宏命令生成器</title>
+<style>
+:root{color-scheme:light;--bg:#f3f5f1;--paper:#fff;--ink:#192e2c;--muted:#62736e;--line:#dce4df;--teal:#126d60;--light:#edf6f1;--amber:#ad641e;--danger:#b43535;--mono:Consolas,"SFMono-Regular",monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 "Segoe UI","Microsoft YaHei",sans-serif}button,input,select,textarea{font:inherit}button,select{cursor:pointer}button{border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink);padding:8px 13px;font-weight:600;transition:background .15s,border-color .15s}button:hover{background:var(--light);border-color:#b4cbc0}button:disabled{opacity:.42;cursor:not-allowed}button.primary{background:var(--teal);color:white;border-color:var(--teal)}button.primary:hover{background:#09584d}button.ghost{background:transparent}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid #7dc5ad;outline-offset:3px}input,select{width:100%;min-width:0;border:1px solid #cdd9d1;border-radius:7px;background:#fff;padding:9px 11px;color:var(--ink)}input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal);margin:0}input[type=number]{font-variant-numeric:tabular-nums}label{display:block;font-size:12px;color:#4c625b;margin-bottom:5px}h1,h2,h3,p{margin:0}h1{font-size:26px;font-weight:700;letter-spacing:-.8px;line-height:1.3}h2{font-size:16px;font-weight:650}h3{font-size:13px}small,.hint{font-size:12px;color:var(--muted)}.page{max-width:1450px;margin:auto;padding:30px 32px 20px}.header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:25px}.brand{display:flex;align-items:center;gap:15px}.mark{width:46px;height:46px;background:var(--teal);color:#fff;border-radius:12px;display:grid;place-items:center;flex:none}.eyebrow{font:11px/1 var(--mono);color:var(--teal);letter-spacing:1.8px;margin-bottom:8px}.subtitle{color:var(--muted);margin-top:8px;font-size:13px}.{display:flex;gap:8px;align-items:center;white-space:nowrap;color:var(--teal);font-size:12px;background:#e3eee6;border:1px solid #d1e3d7;border-radius:30px;padding:7px 13px}.dot{width:7px;height:7px;display:inline-block;background:#29846b;border-radius:50%}.workspace{display:grid;grid-template-columns:minmax(460px,1fr) minmax(450px,.98fr);gap:22px;align-items:start}.config{display:flex;flex-direction:column;gap:16px}.card{border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:21px 23px;box-shadow:0 2px 4px #1e453304}.section-heading{display:flex;gap:10px;align-items:center;margin-bottom:17px}.section-number{color:var(--teal);font:12px var(--mono);border:1px solid #d2e6da;border-radius:5px;padding:3px 5px;line-height:1}.heading-between{justify-content:space-between}.heading-title{display:flex;gap:10px;align-items:center}.path-input{font-family:var(--mono);font-size:13px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px 18px}.unit-field{position:relative}.unit-field input{padding-right:50px}.unit{position:absolute;right:11px;bottom:10px;font-size:12px;color:var(--muted);pointer-events:none}.field-help{margin-top:9px;line-height:1.7}.check-row{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:15px;cursor:pointer}.ocp-note{background:var(--light);border-left:3px solid #75ad95;padding:11px 13px;font-size:12px;color:#386052;margin:14px 0 0;border-radius:0 6px 6px 0}.section-split{border:0;border-top:1px solid var(--line);margin:20px 0}.stage-controls{display:flex;gap:8px;align-items:center}.stage-controls input{width:65px;padding:6px 8px}.stage-controls button{padding:6px 10px;font-size:12px}.stage-controls label{margin:0;font-size:12px}.stages{display:flex;flex-direction:column;gap:9px;max-height:310px;overflow:auto;padding:1px 3px 1px 0;margin:13px 0}.stage{display:grid;grid-template-columns:72px 1fr 74px 32px;gap:10px;align-items:center;background:#f7f9f6;border:1px solid #e1e8e1;border-radius:8px;padding:8px 10px}.stage label{margin:0;font-size:12px;color:var(--ink)}.stage input{padding:7px 9px;font-family:var(--mono);font-size:13px}.stage .direction{font-size:11px;color:var(--muted);text-align:center}.stage button{border:0;background:transparent;padding:3px;color:#7a8d82;font-size:18px;line-height:1}.stage button:hover{color:var(--danger);background:#fff0ed}.mini-actions{display:flex;gap:8px;flex-wrap:wrap}.mini-actions button{padding:6px 10px;font-size:12px}.tag{background:var(--light);color:var(--teal);padding:3px 7px;border-radius:4px;font:11px var(--mono)}.params-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.params-grid>section+section{border-left:1px solid var(--line);padding-left:20px}.params-grid h3{margin-bottom:13px}.parameter{margin-top:10px}.details{font-size:12px;color:var(--muted)}summary{cursor:pointer;color:#3c5d50;font-weight:600}.details p{margin-top:10px}.details code{background:#eef2ed;padding:1px 4px;border-radius:3px;font-family:var(--mono)}.details ul{padding-left:19px}.details a{color:var(--teal)}.preview-panel{position:sticky;top:20px;display:flex;flex-direction:column;gap:14px}.preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.live{font-size:11px;color:var(--muted)}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}.metric{background:#f8faf6;padding:11px 14px}.metric strong{font:25px/1.3 var(--mono);display:block;color:var(--teal)}.metric span{font-size:11px;color:var(--muted)}.chart-title{display:flex;justify-content:space-between;gap:8px;margin-top:18px;font-size:12px}.chart-title small{font-size:10px}#voltage-chart{width:100%;height:135px;display:block;overflow:visible;margin:5px 0 0}.sequence{font-family:var(--mono);font-size:11px;color:var(--muted);max-height:46px;overflow:auto;word-break:break-word}.error{border:1px solid #efc3bb;background:#fff4ef;color:#9b3328;border-radius:8px;padding:12px 14px;font-size:13px}.code-card{background:#142d2b;border:1px solid #142d2b;border-radius:11px;overflow:hidden}.code-toolbar{display:flex;align-items:center;justify-content:space-between;padding:11px 17px;background:#1b3733;color:#bed0c6;font-size:11px;border-bottom:1px solid #29453e}.code-toolbar span:first-child{font-family:var(--mono)}.code-toolbar button{padding:3px 9px;font-size:11px;color:#d6e8db;border-color:#48645a;background:transparent}.code-area{position:relative;height:360px;overflow:auto;tab-size:2;scrollbar-color:#49645a #142d2b}.code-area pre{color:#d0e6d8;margin:0;padding:17px 19px;font:12px/1.8 var(--mono);white-space:pre;min-height:100%;user-select:text}.code-empty{color:#88a79a!important}.export-card{padding:16px 20px}.export-fields{display:grid;grid-template-columns:1fr 168px;gap:12px}.download-row{display:flex;gap:9px;margin-top:13px}.download-row .primary{flex:1}.export-note{margin-top:8px;font-size:11px;color:var(--muted)}.footer{display:flex;justify-content:space-between;gap:20px;font-size:11px;color:#728278;border-top:1px solid var(--line);margin-top:25px;padding-top:15px}.status{font-size:12px;color:var(--teal);min-height:20px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}[hidden]{display:none!important}
+@media(min-width:1600px){.code-area{height:410px}}offline
+@media(max-width:1050px){.page{padding:22px 20px}.workspace{grid-template-columns:1fr 1fr;gap:15px}.card{padding:18px}.params-grid{gap:13px}.params-grid>section+section{padding-left:13px}.stage{grid-template-columns:55px 1fr 61px 26px;gap:5px;padding:8px}.header h1{font-size:23px}.offline{display:none}.export-fields{grid-template-columns:1fr}.workspace{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:760px){.page{padding:20px 14px}.workspace{grid-template-columns:1fr}.preview-panel{position:static}.header{margin-bottom:20px}.mark{width:40px;height:40px}.header h1{font-size:21px}.eyebrow{font-size:10px}.card{padding:18px}.footer{display:block}.footer span{display:block;margin-bottom:5px}.export-fields{grid-template-columns:1fr 145px}.code-area{height:350px}}
+@media(max-width:400px){.field-grid{gap:12px}.params-grid{grid-template-columns:1fr}.params-grid>section+section{padding-left:0;border-left:0;border-top:1px solid var(--line);padding-top:12px}.export-fields{grid-template-columns:1fr}.heading-between{flex-wrap:wrap;gap:10px}.stage-controls{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="header">
+    <div class="brand"><div class="mark" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M3 19h4l4-10 5 15 4-18 3 13h3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+    <div><div class="eyebrow">ELECTROCHEMISTRY / CHI660</div><h1>原位 EIS 宏命令生成器</h1><p class="subtitle">设置电位序列，生成可直接导入工作站的 TXT 宏。</p></div></div>
+   <a class="offline" href="https://alenturing.github.io/myblog/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+  <span class="dot"></span>作者 · Alen Turing
+</a>
+  </header>
+  <main class="workspace">
+    <form class="config" id="settings-form" novalidate>
+      <section class="card">
+        <div class="section-heading"><span class="section-number">01</span><h2>数据保存路径</h2></div>
+        <label for="save-path">CHI 实验数据目录</label>
+        <input class="path-input" id="save-path" name="save_path" type="text" placeholder="D:\实验数据\EIS" spellcheck="false" autocomplete="off" required aria-describedby="path-help">
+        <p class="hint field-help" id="path-help">此地址写入宏首行 <code>folder:</code>。请填写运行 CHI 的电脑上的完整路径，确保目录已存在。浏览器无法读取本机文件夹的完整路径。</p>
+      </section>
+      <section class="card">
+        <div class="section-heading"><span class="section-number">02</span><h2>电位与扫描流程</h2></div>
+        <label class="check-row" for="use-ocp"><input id="use-ocp" name="use_ocp" type="checkbox">使用启动时的开路电位，先测一次 EIS</label>
+        <div class="field-grid">
+          <div><label for="v-init" id="initial-label">初始电压</label><div class="unit-field"><input id="v-init" name="v_init" type="text" inputmode="decimal" spellcheck="false"><span class="unit">V</span></div></div>
+          <div><label for="v-step">等电压间隔</label><div class="unit-field"><input id="v-step" name="v_step" type="text" inputmode="decimal" spellcheck="false"><span class="unit">V</span></div></div>
+        </div>
+        <div class="ocp-note" id="ocp-note" hidden>OCP-EIS → LSV 到指定起点 → 起点 EIS → 多段等间隔测试。OCP 由 CHI 在运行时读取；首次 LSV 再次取 OCP，可能与首次 EIS 读数有漂移。</div>
+        <hr class="section-split">
+        <div class="section-heading heading-between"><h3>多段扫描</h3><div class="stage-controls"><label for="segment-count">段数</label><input id="segment-count" type="number" min="1" max="100" step="1" value="2"><button type="button" id="apply-count">应用</button></div></div>
+        <div class="mini-actions"><button type="button" id="three-stage-example">填入放电 → 充电 → 放电示例</button><button type="button" id="add-stage">＋ 增加一段</button></div>
+        <div class="stages" id="stage-list" aria-label="各段终止电压"></div>
+        <p class="hint">按顺序填写各段终点。每段跨度须为间隔的整数倍，公共转折点只测一次。升降电位是否对应充放电取决于电极体系；这里使用 LSV 扫描。</p>
+      </section>
+      <section class="card">
+        <div class="section-heading"><span class="section-number">03</span><h2>测试参数</h2></div>
+        <div class="params-grid">
+          <section><h3>EIS <span class="tag">tech=imp</span></h3>
+            <div class="parameter"><label for="freq-low">最低频率 · Hz</label><input id="freq-low" name="eis_freq_low" type="text" inputmode="decimal" spellcheck="false"></div>
+            <div class="parameter"><label for="freq-high">最高频率 · Hz</label><input id="freq-high" name="eis_freq_high" type="text" inputmode="decimal" spellcheck="false"></div>
+            <div class="parameter"><label for="amplitude">交流振幅 · V</label><input id="amplitude" name="eis_amp" type="text" inputmode="decimal" spellcheck="false"></div>
+            <div class="parameter"><label for="eis-quiet">静置时间 · s</label><input id="eis-quiet" name="eis_quiet" type="text" inputmode="decimal" spellcheck="false"></div>
+          </section>
+          <section><h3>LSV <span class="tag">tech=lsv</span></h3>
+            <div class="parameter"><label for="scan-rate">扫描速率 · V/s</label><input id="scan-rate" name="lsv_scan_rate" type="text" inputmode="decimal" spellcheck="false"></div>
+            <div class="parameter"><label for="sample-interval">取样间隔 · V</label><input id="sample-interval" name="lsv_sample_interval" type="text" inputmode="decimal" spellcheck="false"></div>
+            <div class="parameter"><label for="lsv-quiet">静置时间 · s</label><input id="lsv-quiet" name="lsv_quiet" type="text" inputmode="decimal" spellcheck="false"></div>
+          </section>
+        </div>
+      </section>
+      <section class="card details">
+        <details><summary>命令说明与使用方法</summary>
+          <p><code>folder:</code> 指定实验数据目录；<code>tsave</code> 将每次 EIS、LSV 数据导出为 TXT。文件以测试编号、段号和电压命名，区分往返相同电压。</p>
+          <p><code>initeoff</code> 关闭实验结束后返回初始电位。固定电位阶段使用 <code>cellon</code> 保持实验间电解池接通。OCP-EIS 与首次 OCP-LSV 之间使用 <code>celloff</code>，OCP 过渡完成后启用 <code>cellon</code>。宏末尾输出 <code>celloff</code>、<code>end</code>。</p>
+          <p>把下载的 TXT 导入 CHI 的 Macro Command 窗口，先执行 Test 核对型号支持的命令与参数。网页不连接仪器。OCP 到指定起点的跨度由实际 OCP 决定，需在 CHI 端核查 LSV 范围。</p>
+          <p>TXT 默认采用 GBK（中文 Windows ANSI）及 Windows 换行，也可选择 UTF-8 无 BOM。同一宏重复运行请更换实验数据目录，避免已有文件重名。</p>
+          <p>通用命令依据 <a href="https://commons.lbl.gov/download/attachments/123536269/CH%20600E%20Series%20Potentiostat%20User%20Manual.pdf?api=v2&amp;modificationDate=1683211128841&amp;version=1" target="_blank" rel="noopener noreferrer">CH Instruments 600E 手册 §5.10</a>。技术专用命令与桌面版一致，具体以安装的 CHI 帮助文件为准。</p>
+        </details>
+      </section>
+    </form>
+    <aside class="preview-panel" aria-label="宏命令预览和导出">
+      <section class="card">
+        <div class="preview-head"><h2>实验预览</h2><span class="live"><span class="dot"></span> 随参数实时更新</span></div>
+        <div class="metrics"><div class="metric"><strong id="eis-count">—</strong><span>EIS 测试次数</span></div><div class="metric"><strong id="lsv-count">—</strong><span>LSV 扫描次数</span></div><div class="metric"><strong id="stage-count">—</strong><span>扫描段数</span></div></div>
+        <div class="chart-title"><span>电位序列</span><small>V · 按测试顺序排列，非时间轴</small></div>
+        <svg id="voltage-chart" viewBox="0 0 500 135" role="img" aria-label="设定电位序列图"></svg>
+        <div class="sequence" id="sequence"></div>
+      </section>
+      <div class="error" id="error" role="alert" hidden></div>
+      <section class="code-card" aria-label="TXT 宏命令">
+        <div class="code-toolbar"><span>MACRO / TXT</span><span id="line-count">0 行</span><button type="button" id="copy-code" disabled>复制</button></div>
+        <div class="code-area" tabindex="0" aria-label="可滚动的宏命令预览"><pre id="macro-code" class="code-empty">填写参数后生成宏命令…</pre></div>
+      </section>
+      <section class="card export-card">
+        <div class="export-fields"><div><label for="filename">宏文件名</label><input id="filename" type="text" value="in-situ-EIS.txt" spellcheck="false"></div><div><label for="encoding">TXT 编码</label><select id="encoding"><option value="gbk">ANSI / GBK</option><option value="utf-8">UTF-8 无 BOM</option></select></div></div>
+        <div class="download-row"><button type="button" id="download" class="primary" disabled>↓ 下载 TXT 宏文件</button><button type="button" id="refresh" title="按当前参数重新生成">生成预览</button></div>
+        <p class="export-note">TXT 存到浏览器选择的下载位置；实验数据仍由宏首行 folder 指定。</p>
+      </section>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+    </aside>
+  </main>
+  <footer class="footer"><span id="storage-status">参数仅保存在当前浏览器本地，不上传。</span><span>辰华CHI660 / 原位EIS/insite EIS <button class="ghost" id="reset" type="button" style="padding:2px 7px;margin-left:8px;font-size:11px">恢复默认</button></span></footer>
+</div>
+<script id="macro-core">
+'use strict';
+/* Pure macro generation: no DOM, network, dependencies or floating-point stepping. */
+(() => {
+  const MAX_POINTS = 10000, MAX_SEGMENTS = 100;
+  const DEFAULTS = Object.freeze({save_path:'D:\\实验数据\\EIS',use_ocp:false,v_init:'2.500',v_step:'0.050',segment_ends:['2.550','2.500'],eis_freq_low:'0.01',eis_freq_high:'100000',eis_amp:'0.005',eis_quiet:'0',lsv_scan_rate:'0.000100',lsv_sample_interval:'0.001',lsv_quiet:'0'});
+  function decimalText(value, name='数值') {
+    const text=String(value??'').trim();
+    const match=/^([+-]?)(\d+(?:\.\d*)?|\.\d+)(?:e([+-]?\d+))?$/i.exec(text);
+    if(!match || text.length>80 || !Number.isFinite(Number(text))) throw new Error(`${name}必须是有限数字`);
+    const exponent=Number(match[3]||0);
+    if(Math.abs(exponent)>320) throw new Error(`${name}数值超出可用精度`);
+    const [integer,fraction='']=match[2].split('.');
+    let digits=integer+fraction, position=integer.length+exponent;
+    if(position<0){digits='0'.repeat(-position)+digits;position=0;}
+    if(position>digits.length) digits=digits.padEnd(position,'0');
+    let whole=(digits.slice(0,position)||'0').replace(/^0+(?=\d)/,'');
+    let tail=digits.slice(position).replace(/0+$/,'');
+    const result=whole+(tail?'.'+tail:'');
+    return (match[1]==='-' && Number(result)!==0?'-':'')+result;
+  }
+  function micro(value,name='电压') {
+    const text=decimalText(value,name), [whole,fraction='']=text.replace(/^-/,'').split('.');
+    if(fraction.length>6) throw new Error(`${name}最多支持 6 位小数`);
+    return (text.startsWith('-')?-1:1)*(Number(whole)*1000000+Number(fraction.padEnd(6,'0')));
+  }
+  function voltage(value) {
+    const negative=value<0?'-':'', digits=String(Math.abs(value)).padStart(7,'0');
+    let fraction=digits.slice(-6).replace(/0+$/,'').padEnd(3,'0');
+    return negative+digits.slice(0,-6)+'.'+fraction;
+  }
+  function normalizePath(value) {
+    const text=String(value??'').trim().replace(/\//g,'\\');
+    if(!text) throw new Error('请填写 CHI 实验数据保存目录');
+    if(/[\x00-\x1f#<>|?"*]/.test(text)) throw new Error('数据路径不能含换行、# 或 Windows 路径非法字符');
+    let root,tail,isUNC=false;
+    if(/^[a-z]:\\/i.test(text)){root=text.slice(0,3);tail=text.slice(3);}
+    else {
+      const match=/^\\\\([^\\]+)\\([^\\]+)(?:\\(.*))?$/.exec(text);
+      if(!match) throw new Error('请输入含盘符的 Windows 绝对路径或 UNC 共享路径');
+      root='\\\\'+match[1]+'\\'+match[2];tail=match[3]||'';isUNC=true;
+    }
+    if(tail.includes(':') || (isUNC&&root.includes(':'))) throw new Error('数据路径中只有盘符后可以使用冒号');
+    const parts=[];
+    for(const part of tail.split('\\')){if(!part || part==='.')continue;if(part==='..')parts.pop();else parts.push(part);}
+    return root+(isUNC&&parts.length?'\\':'')+parts.join('\\');
+  }
+  function validate(raw) {
+    const p={...raw,save_path:normalizePath(raw.save_path),use_ocp:!!raw.use_ocp};
+    const fields=[['v_init','初始电压 / 等间隔起点',-10,10],['v_step','电压间隔',.01,13.1],['eis_freq_low','EIS 最低频率',.00001,100000],['eis_freq_high','EIS 最高频率',.0001,1000000],['eis_amp','EIS 振幅',.00001,.7],['eis_quiet','EIS 静置时间',0,100000],['lsv_scan_rate','LSV 扫描速率',.000001,10000],['lsv_sample_interval','LSV 取样间隔',.000001,.064],['lsv_quiet','LSV 静置时间',0,100000]];
+    for(const [key,name,low,high] of fields){p[key]=decimalText(p[key],name);if(Number(p[key])<low || Number(p[key])>high)throw new Error(`${name}范围为 ${low} ～ ${high}`);}
+    if(Number(p.eis_freq_low)>Number(p.eis_freq_high))throw new Error('EIS 最低频率不能大于最高频率');
+    if(!Array.isArray(raw.segment_ends)||raw.segment_ends.length<1||raw.segment_ends.length>MAX_SEGMENTS)throw new Error(`请设置 1 ～ ${MAX_SEGMENTS} 个扫描段`);
+    p.segment_ends=raw.segment_ends.map((end,i)=>{const result=decimalText(end,`第 ${i+1} 段终止电压`);if(Number(result)<-10||Number(result)>10)throw new Error(`第 ${i+1} 段终止电压范围为 -10 ～ 10 V`);micro(result,`第 ${i+1} 段终止电压`);return result;});
+    micro(p.v_init,'初始电压');micro(p.v_step,'电压间隔');return p;
+  }
+  function generate(raw) {
+    const p=validate(raw), step=micro(p.v_step), plan=[{v:micro(p.v_init),stage:0}];
+    let current=plan[0].v;
+    p.segment_ends.forEach((value,i)=>{
+      const end=micro(value),distance=Math.abs(end-current);
+      if(!distance)throw new Error(`第 ${i+1} 段终止电压与起点相同，请修改或删除该段`);
+      if(distance%step!==0)throw new Error(`第 ${i+1} 段跨度 ${decimalText(voltage(distance))} V 不是间隔 ${p.v_step} V 的整数倍，请修改终点或间隔`);
+      const count=distance/step;
+      if(plan.length+count>MAX_POINTS)throw new Error(`测试点过多，最多支持 ${MAX_POINTS} 个固定电位 EIS 点`);
+      const direction=end>current?1:-1;
+      for(let j=1;j<=count;j++)plan.push({v:current+direction*step*j,stage:i+1});
+      current=end;
+    });
+    const lines=[`folder: ${p.save_path}`,'initeoff',p.use_ocp?'celloff':'cellon',''];
+    let eisCount=0,lsvCount=0;
+    function eis(v,stage){
+      const label=v===null?'OCP':voltage(v)+'V';
+      lines.push('tech=imp',v===null?'eio':`ei=${voltage(v)}`,`fl=${p.eis_freq_low}`,`fh=${p.eis_freq_high}`,`amp=${p.eis_amp}`,`qt=${p.eis_quiet}`,'impautosens','impft','run',`tsave=EIS_${String(++eisCount).padStart(4,'0')}_S${String(stage).padStart(2,'0')}_${label}.txt`,'');
+    }
+    function lsv(start,end,stage){
+      const label=start===null?'OCP':voltage(start)+'V';
+      lines.push('tech=lsv',start===null?'eio':`ei=${voltage(start)}`,`ef=${voltage(end)}`,`v=${p.lsv_scan_rate}`,`si=${p.lsv_sample_interval}`,`qt=${p.lsv_quiet}`,'autosens','run',`tsave=LSV_${String(++lsvCount).padStart(4,'0')}_S${String(stage).padStart(2,'0')}_${label}_to_${voltage(end)}V.txt`,'');
+    }
+    if(p.use_ocp){eis(null,0);lsv(null,plan[0].v,0);lines.push('cellon','');}
+    eis(plan[0].v,0);
+    for(let i=1;i<plan.length;i++){lsv(plan[i-1].v,plan[i].v,plan[i].stage);eis(plan[i].v,plan[i].stage);}
+    lines.push('celloff','end');
+    return {text:lines.join('\n')+'\n',plan,params:p,eisCount,lsvCount,lineCount:lines.length};
+  }
+  let gbkMap;
+  function encode(text,encoding='gbk') {
+    const windowsText=text.replace(/\r?\n/g,'\r\n');
+    if(encoding==='utf-8') return new TextEncoder().encode(windowsText);
+    if(encoding!=='gbk')throw new Error('不支持的 TXT 编码');
+    if(!gbkMap){
+      const decoder=new TextDecoder('gbk',{fatal:true}), map=new Map([['€',[0x80]]]);
+      for(let a=0x81;a<=0xfe;a++)for(let b=0x40;b<=0xfe;b++){
+        if(b===0x7f)continue;
+        try{const character=decoder.decode(new Uint8Array([a,b]));if([...character].length===1&&!map.has(character))map.set(character,[a,b]);}catch{}
+      }
+      gbkMap=map;
+    }
+    const bytes=[];
+    for(const character of windowsText){const code=character.codePointAt(0);if(code<128)bytes.push(code);else{const pair=gbkMap.get(character);if(!pair)throw new Error(`字符“${character}”无法用 GBK 保存。请调整路径或选择 UTF-8 编码。`);bytes.push(...pair);}}
+    return new Uint8Array(bytes);
+  }
+  globalThis.EISCore=Object.freeze({DEFAULTS,MAX_SEGMENTS,generate,encode,normalizePath,decimalText,micro,voltage});
+})();
+</script>
+<script id="macro-ui">
+'use strict';
+(() => {
+  const $=id=>document.getElementById(id), core=globalThis.EISCore, form=$('settings-form');
+  const STORAGE_KEY='chi660-eis-html-settings-v1';
+  const fields={save_path:'save-path',v_init:'v-init',v_step:'v-step',eis_freq_low:'freq-low',eis_freq_high:'freq-high',eis_amp:'amplitude',eis_quiet:'eis-quiet',lsv_scan_rate:'scan-rate',lsv_sample_interval:'sample-interval',lsv_quiet:'lsv-quiet'};
+  let result=null,timer;
+  const defaults=()=>({...core.DEFAULTS,segment_ends:[...core.DEFAULTS.segment_ends]});
+  function rawParams(){const p={};for(const [key,id] of Object.entries(fields))p[key]=$(id).value;p.use_ocp=$('use-ocp').checked;p.segment_ends=[...$('stage-list').querySelectorAll('input')].map(input=>input.value);return p;}
+  function stageRow(value,index){
+    const row=document.createElement('div');row.className='stage';
+    row.innerHTML='<label></label><div class="unit-field"><input type="text" inputmode="decimal" spellcheck="false"><span class="unit">V</span></div><span class="direction"></span><button type="button" title="删除此段">×</button>';
+    const input=row.querySelector('input'),label=row.querySelector('label');
+    input.id='stage-end-'+index;input.value=value;label.htmlFor=input.id;label.textContent='第 '+(index+1)+' 段';
+    row.querySelector('button').setAttribute('aria-label','删除第 '+(index+1)+' 段');
+    row.querySelector('button').addEventListener('click',()=>{const ends=rawParams().segment_ends;if(ends.length===1){notify('至少保留一个扫描段。');return;}ends.splice(index,1);renderStages(ends);update();});
+    return row;
+  }
+  function renderStages(ends){$('stage-list').replaceChildren(...ends.map(stageRow));$('segment-count').value=ends.length;$('add-stage').disabled=ends.length>=core.MAX_SEGMENTS;}
+  function extendStages(ends,count){while(ends.length<count)ends.push(ends.length>1?ends[ends.length-2]:$('v-init').value);return ends;}
+  function applyParams(p){for(const [key,id]of Object.entries(fields))$(id).value=p[key]??core.DEFAULTS[key];$('use-ocp').checked=!!p.use_ocp;renderStages(p.segment_ends);updateMode();}
+  function updateMode(){$('initial-label').textContent=$('use-ocp').checked?'LSV 到等间隔起点':'初始电压';$('ocp-note').hidden=!$('use-ocp').checked;}
+  function updateDirections(){let previous=Number($('v-init').value);[...$('stage-list').children].forEach(row=>{const current=Number(row.querySelector('input').value),badge=row.querySelector('.direction');badge.textContent=Number.isFinite(current)&&Number.isFinite(previous)?(current>previous?'↑ 升电位':current<previous?'↓ 降电位':'相同电位'):'待设置';previous=current;});}
+  function saveLocal(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({...rawParams(),filename:$('filename').value,encoding:$('encoding').value}));}catch{$('storage-status').textContent='浏览器未允许本地记忆；当前仍可生成和下载，关闭后需重新填写。';}}
+  function svg(tag,attrs,text){const item=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const[k,v]of Object.entries(attrs))item.setAttribute(k,v);if(text!==undefined)item.textContent=text;return item;}
+  function chart(plan){
+    const target=$('voltage-chart');target.replaceChildren();
+    const values=plan.map(point=>point.v/1e6),low=Math.min(...values),high=Math.max(...values),span=high-low||.1;
+    const x=i=>46+i/(values.length-1||1)*440,y=v=>105-(v-low)/span*77;
+    for(let i=0;i<3;i++){const value=low+span*i/2,position=y(value);target.append(svg('line',{x1:46,y1:position,x2:487,y2:position,stroke:'#e0e8e1','stroke-dasharray':'3 4'}),svg('text',{x:38,y:position+4,'text-anchor':'end',fill:'#829085','font-size':10,'font-family':'Consolas,monospace'},value.toFixed(3)));}
+    const points=values.map((v,i)=>x(i).toFixed(2)+','+y(v).toFixed(2)).join(' ');
+    target.append(svg('polygon',{points:`46,115 ${points} 486,115`,fill:'#e8f3ec'}),svg('polyline',{points,fill:'none',stroke:'#167260','stroke-width':2,'stroke-linejoin':'round'}));
+    const ends=[0];for(let i=1;i<plan.length;i++)if(i===plan.length-1||plan[i+1].stage!==plan[i].stage)ends.push(i);
+    ends.forEach(i=>target.append(svg('circle',{cx:x(i),cy:y(values[i]),r:3.5,fill:'#fff',stroke:'#167260','stroke-width':2})));
+    target.append(svg('text',{x:46,y:132,fill:'#829085','font-size':10},'固定起点'),svg('text',{x:486,y:132,'text-anchor':'end',fill:'#829085','font-size':10},'最后终点'));
+  }
+  function clearInvalid(error){
+    result=null;$('error').textContent=error.message;$('error').hidden=false;
+    $('macro-code').textContent='请修正参数后生成宏命令。';$('macro-code').classList.add('code-empty');
+    ['eis-count','lsv-count','stage-count'].forEach(id=>$(id).textContent='—');
+    $('line-count').textContent='0 行';$('voltage-chart').replaceChildren();$('sequence').textContent='';
+    $('download').disabled=true;$('copy-code').disabled=true;
+  }
+  function update(){
+    clearTimeout(timer);updateMode();updateDirections();saveLocal();$('status').textContent='';
+    try{
+      if(Number($('segment-count').value)!==rawParams().segment_ends.length)throw new Error('修改扫描段数后，请点击“应用”以更新各段终点。');
+      result=core.generate(rawParams());$('error').hidden=true;
+      $('macro-code').textContent=result.text;$('macro-code').classList.remove('code-empty');
+      $('eis-count').textContent=result.eisCount;$('lsv-count').textContent=result.lsvCount;$('stage-count').textContent=result.params.segment_ends.length;
+      $('line-count').textContent=result.lineCount+' 行';$('download').disabled=false;$('copy-code').disabled=false;
+      chart(result.plan);
+      const labels=result.plan.map(point=>core.voltage(point.v));
+      let sequence=labels.length>32?[...labels.slice(0,12),'…',...labels.slice(-8)]:labels;
+      $('sequence').textContent=(result.params.use_ocp?'OCP → ':'')+sequence.join(' → ')+' V';
+      return true;
+    }catch(error){clearInvalid(error);return false;}
+  }
+  function notify(text){$('status').textContent=text;}
+  form.addEventListener('submit',event=>{event.preventDefault();update();});
+  form.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(update,160);});
+  form.addEventListener('change',event=>{if(event.target.id!=='segment-count')update();});
+  $('apply-count').addEventListener('click',()=>{
+    const count=Number($('segment-count').value);
+    if(!Number.isInteger(count)||count<1||count>100){notify('扫描段数须为 1 ～ 100 的整数。');return;}
+    const ends=extendStages(rawParams().segment_ends,count);renderStages(ends.slice(0,count));update();
+  });
+  $('segment-count').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();$('apply-count').click();}});
+  $('add-stage').addEventListener('click',()=>{const ends=rawParams().segment_ends;if(ends.length<100){extendStages(ends,ends.length+1);renderStages(ends);update();$('stage-list').lastElementChild.querySelector('input').focus();}});
+  $('three-stage-example').addEventListener('click',()=>{const p=rawParams();Object.assign(p,{use_ocp:true,v_init:'1.200',v_step:'0.100',segment_ends:['1.000','1.400','1.000']});applyParams(p);update();notify('已填入 OCP 起始的三段示例：1.200 → 1.000 → 1.400 → 1.000 V。');});
+  $('refresh').addEventListener('click',()=>{if(update()){notify('预览已按当前参数更新。');$('macro-code').scrollIntoView({behavior:'smooth',block:'nearest'});}});
+  $('copy-code').addEventListener('click',async()=>{
+    if(!update())return;const text=result.text;
+    try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);}else throw new Error();}
+    catch{const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.append(area);area.select();const ok=document.execCommand('copy');area.remove();if(!ok){notify('浏览器未允许自动复制，请在宏预览区选中文字复制。');return;}}
+    notify('已复制当前宏命令。');
+  });
+  $('download').addEventListener('click',()=>{
+    if(!update())return;
+    try{
+      let name=$('filename').value.trim();if(!name)name='in-situ-EIS.txt';if(/[\x00-\x1f<>:"/\\|?*]/.test(name))throw new Error('宏文件名不能包含路径、冒号或其他 Windows 文件名非法字符');if(!/\.txt$/i.test(name))name+='.txt';
+      const bytes=core.encode(result.text,$('encoding').value),blob=new Blob([bytes],{type:'text/plain'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+      link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+      notify(`已提交下载：${name}（${$('encoding').value==='gbk'?'GBK':'UTF-8'}，${result.eisCount} 次 EIS）。`);
+    }catch(error){notify(error.message);}
+  });
+  $('filename').addEventListener('input',saveLocal);$('encoding').addEventListener('change',saveLocal);
+  $('reset').addEventListener('click',()=>{applyParams(defaults());$('filename').value='in-situ-EIS.txt';$('encoding').value='gbk';update();notify('已恢复默认参数。');});
+  let initial=defaults(),extra={};
+  try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(saved&&typeof saved==='object'&&Array.isArray(saved.segment_ends)&&saved.segment_ends.length>=1&&saved.segment_ends.length<=100&&saved.segment_ends.every(value=>typeof value==='string'||typeof value==='number')){initial={...initial,...saved};extra=saved;}}
+  catch{$('storage-status').textContent='浏览器无法读取本地记忆；当前使用默认参数。';}
+  applyParams(initial);if(typeof extra.filename==='string')$('filename').value=extra.filename;if(['gbk','utf-8'].includes(extra.encoding))$('encoding').value=extra.encoding;update();
+})();
+</script>
+</body>
+</html>
