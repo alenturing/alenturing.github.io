@@ -1,42 +1,323 @@
+
+
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>26-05-20</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 100%;
-			height:1200;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        h1, h2, h3, h4, h5, h6 { margin-top: 1.5rem; margin-bottom: 1rem; }
-        pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow-x: auto; }
-        code { background: #f6f8fa; padding: 0.2rem 0.4rem; border-radius: 3px; }
-        blockquote { border-left: 4px solid #dfe2e5; padding-left: 1rem; margin: 1rem 0; color: #6a737d; }
-        table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
-        th, td { border: 1px solid #dfe2e5; padding: 0.5rem; text-align: left; }
-        th { background: #f6f8fa; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="欢迎阅读我的第一篇博客文章">
+  <meta name="color-scheme" content="light dark">
+  <title>“我的第一篇个人博客” · Alen's blog</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #eef2f7;
+      --paper: #ffffff;
+      --ink: #17243b;
+      --muted: #64748b;
+      --line: #dfe6ef;
+      --accent: #2878d0;
+      --accent-soft: #e9f2ff;
+      --shadow: 0 24px 70px rgba(31, 52, 82, .11);
+      --body-font: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+      --heading-font: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: clamp(18px, 4vw, 56px) 18px 28px;
+      background: var(--page);
+      color: var(--ink);
+      font-family: var(--body-font);
+      line-height: 1.75;
+      transition: background-color .25s ease, color .25s ease;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .site-wrap { width: min(100%, 940px); margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 auto 18px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .brand { color: var(--ink); font-weight: 750; letter-spacing: -.03em; }
+    .top-links { display: flex; gap: 18px; }
+    .top-links a { color: var(--muted); }
+    .post-frame {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .post-header { padding: clamp(28px, 6vw, 64px) clamp(24px, 7vw, 76px) 30px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 22px; height: 2px; background: currentColor; content: ""; }
+    h1, h2, h3 { font-family: var(--heading-font); }
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(2.25rem, 7vw, 4.7rem);
+      line-height: 1.1;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .post-content {
+      padding: 4px clamp(24px, 7vw, 76px) clamp(32px, 6vw, 64px);
+      color: var(--ink);
+      font-size: 1.04rem;
+      line-height: 1.9;
+      overflow-wrap: anywhere;
+    }
+    .post-content > :first-child { margin-top: 0; }
+    .post-content h2 {
+      margin: 2.3em 0 .8em;
+      padding-bottom: .4em;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(1.4rem, 4vw, 1.9rem);
+      line-height: 1.3;
+      letter-spacing: -.035em;
+    }
+    .post-content h3 { margin: 1.8em 0 .6em; font-size: 1.25rem; }
+    .post-content p { margin: 0 0 1.15em; }
+    .post-content ul, .post-content ol { padding-left: 1.5em; margin: .8em 0 1.4em; }
+    .post-content li { padding-left: .25em; margin: .45em 0; }
+    .post-content li::marker { color: var(--accent); }
+    .post-content strong { color: var(--accent); font-weight: 750; }
+    .post-content blockquote {
+      margin: 1.8em 0;
+      padding: .9em 1.2em;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 14px 14px 0;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .post-content blockquote p:last-child { margin-bottom: 0; }
+    .post-content img { display: block; max-width: 100%; height: auto; margin: 1.6em auto; border-radius: 14px; }
+    .post-content pre {
+      overflow-x: auto;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--page) 75%, var(--paper));
+      font-size: .9rem;
+      line-height: 1.65;
+    }
+    .post-content code { padding: .15em .4em; border-radius: 5px; background: var(--accent-soft); font-size: .9em; }
+    .post-content pre code { padding: 0; background: transparent; }
+    .article-end {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px clamp(24px, 7vw, 76px);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .site-footer { padding: 22px 4px 0; color: var(--muted); font-size: .82rem; text-align: center; }
+    .site-footer a { color: inherit; }
+
+    /* 纸感编辑部：暖纸色、衬线标题、居中刊物式版面。 */
+    .theme-editorial {
+      --page: #e9e4d9;
+      --paper: #fbf8f0;
+      --ink: #302a23;
+      --muted: #817566;
+      --line: #ded5c5;
+      --accent: #a64b35;
+      --accent-soft: #f2e8dd;
+      --shadow: 0 18px 55px rgba(61, 45, 28, .09);
+      --body-font: Georgia, "Songti SC", "SimSun", serif;
+      --heading-font: Georgia, "Songti SC", "SimSun", serif;
+    }
+    .theme-editorial .topbar { font-family: var(--body-font); }
+    .theme-editorial .post-frame { border-radius: 4px; }
+    .theme-editorial .post-header { text-align: center; }
+    .theme-editorial .eyebrow { justify-content: center; letter-spacing: .2em; }
+    .theme-editorial .eyebrow::before { display: none; }
+    .theme-editorial h1 { max-width: 720px; margin: 0 auto; font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 500; letter-spacing: -.04em; }
+    .theme-editorial .meta { justify-content: center; font-family: var(--body-font); }
+    .theme-editorial .meta-item { border: 0; border-radius: 0; background: transparent; }
+    .theme-editorial .post-content { max-width: 760px; margin: 0 auto; font-size: 1.12rem; line-height: 2.05; }
+    .theme-editorial .post-content h2 { border-bottom: 1px solid var(--ink); font-weight: 500; }
+    .theme-editorial .post-content blockquote { border-left-width: 2px; border-radius: 0; font-style: italic; }
+
+    /* 夜色终端：适合技术笔记和代码记录。 */
+    .theme-terminal {
+      color-scheme: dark;
+      --page: #0b1016;
+      --paper: #111923;
+      --ink: #d9e5ee;
+      --muted: #8496a5;
+      --line: #263541;
+      --accent: #a3e635;
+      --accent-soft: #1b2a20;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .35);
+      --body-font: "Cascadia Code", Consolas, "Microsoft YaHei", monospace;
+      --heading-font: "Cascadia Code", Consolas, "Microsoft YaHei", monospace;
+    }
+    .theme-terminal .post-frame { border-radius: 16px; }
+    .theme-terminal .post-header { border-bottom: 1px solid var(--line); }
+    .theme-terminal .eyebrow { letter-spacing: .06em; }
+    .theme-terminal .eyebrow::before { width: 8px; height: 8px; border-radius: 50%; }
+    .theme-terminal h1 { font-size: clamp(1.8rem, 5vw, 3.35rem); letter-spacing: -.07em; }
+    .theme-terminal h1::before { color: var(--accent); content: "> "; }
+    .theme-terminal .meta-item { border-radius: 6px; background: #17232d; color: var(--muted); }
+    .theme-terminal .post-content h2 { border-bottom: 1px dashed var(--line); color: var(--accent); }
+    .theme-terminal .post-content h2::before { content: "## "; color: var(--muted); }
+    .theme-terminal .post-content strong { color: var(--accent); }
+    .theme-terminal .post-content blockquote { border-radius: 0 8px 8px 0; }
+    .theme-terminal .article-end { border-top-style: dashed; }
+
+    /* 瑞士极简：大字号、硬朗网格和一抹红色强调。 */
+    .theme-swiss {
+      --page: #f4f4f1;
+      --paper: #fdfdfb;
+      --ink: #171717;
+      --muted: #666;
+      --line: #c9c9c4;
+      --accent: #e44432;
+      --accent-soft: #f8e9e5;
+      --shadow: none;
+      --body-font: Arial, "Microsoft YaHei", sans-serif;
+      --heading-font: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .theme-swiss .post-frame { border: 0; border-top: 8px solid var(--ink); border-radius: 0; }
+    .theme-swiss .post-header { padding-bottom: 24px; }
+    .theme-swiss .eyebrow { letter-spacing: .18em; }
+    .theme-swiss h1 { max-width: 760px; font-size: clamp(2.7rem, 9vw, 6rem); font-weight: 850; line-height: .98; }
+    .theme-swiss .meta-item { border: 0; border-radius: 0; background: transparent; padding-left: 0; }
+    .theme-swiss .post-content { border-top: 1px solid var(--ink); font-size: 1.05rem; }
+    .theme-swiss .post-content h2 { border-bottom: 2px solid var(--ink); }
+    .theme-swiss .post-content blockquote { border-radius: 0; }
+
+    @media (max-width: 620px) {
+      body { padding: 14px 12px 22px; }
+      .topbar { align-items: flex-start; }
+      .top-links { gap: 12px; font-size: .82rem; }
+      .post-frame { border-radius: 20px; }
+      .theme-editorial .post-frame { border-radius: 4px; }
+      .theme-terminal .post-frame { border-radius: 12px; }
+      .theme-swiss .post-frame { border-radius: 0; }
+      .post-content { font-size: 1rem; }
+      .article-end { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
 </head>
-<body>
-<hr>
-<h1 id="h1--"><a name="标题: “第一篇个人博客”" class="reference-link"></a><span class="header-link octicon octicon-link"></span>标题: “第一篇个人博客”</h1><h4 id="h4--2026-05-20"><a name="日期: 2026-05-20" class="reference-link"></a><span class="header-link octicon octicon-link"></span>日期: 2026-05-20</h4><h4 id="h4--"><a name="分类: 个人" class="reference-link"></a><span class="header-link octicon octicon-link"></span>分类: 个人</h4><h4 id="h4--"><a name="介绍: 这是我搭建博客之后发布的第一篇文章，记录了搭建过程和心得。" class="reference-link"></a><span class="header-link octicon octicon-link"></span>介绍: 这是我搭建博客之后发布的第一篇文章，记录了搭建过程和心得。</h4><hr>
-<h2 id="h2--"><a name="🎉 欢迎阅读我的第一篇博客文章" class="reference-link"></a><span class="header-link octicon octicon-link"></span>🎉 欢迎阅读我的第一篇博客文章</h2><p>今天时间是2026年5月20日<br>这是我在 GitHub Pages 上发布的 <strong>第一篇博客文章</strong>。<br>我希望通过这个博客记录自己的技术笔记、和学习心得。</p>
-<hr>
-<h2 id="h2--"><a name="🛠 博客搭建过程" class="reference-link"></a><span class="header-link octicon octicon-link"></span>🛠 博客搭建过程</h2><ol>
-<li><strong>创建 GitHub 仓库</strong> <code>blog</code></li><li><strong>上传 HTML 和 CSS 文件</strong></li><li><strong>配置首页</strong> <code>index.html</code> 和文章列表</li><li><strong>添加第一篇文章</strong> Markdown 文件到 <code>posts/</code></li><li><strong>链接文章</strong> 到首页，确保点击查看文章详细内容</li></ol>
-<hr>
-<h2 id="h2--"><a name="💡 学到的经验" class="reference-link"></a><span class="header-link octicon octicon-link"></span>💡 学到的经验</h2><ul>
-<li>使用 <strong>Markdown</strong> 编写文章，方便维护和阅读</li><li>保持文章文件命名规范，例如 <code>YYYY-MM-DD-标题.md</code></li><li>每篇文章都应该有 <strong>Front Matter</strong>（title、date、category、description）</li></ul>
-<hr>
-<h2 id="h2--"><a name="🚀 后续计划" class="reference-link"></a><span class="header-link octicon octicon-link"></span>🚀 后续计划</h2><ul>
-<li>持续发布新文章</li><li>优化博客样式和布局</li><li>增加文章分类、标签和搜索功能</li></ul>
+<body class="theme-classic">
+  <div class="site-wrap">
+    <nav class="topbar" aria-label="主导航">
+      <a class="brand" href="../index.html">Alen 的博客</a>
+      <div class="top-links">
+        <a href="../all-posts.html">所有文章</a>
+        <a href="../about.html">关于</a>
+      </div>
+    </nav>
+
+    <main class="post-frame">
+      <header class="post-header">
+        <p class="eyebrow">清爽卡片 · 个人</p>
+        <h1>“我的第一篇个人博客”</h1>
+        <div class="meta">
+          <span class="meta-item">2026年05月20日</span>
+          <span class="meta-item">Alen</span>
+        </div>
+      </header>
+
+      <article class="post-content">
+        <h2 id="欢迎阅读我的第一篇博客文章">欢迎阅读我的第一篇博客文章</h2>
+
+<p>今天时间是2026年5月20日<br />
+这是我在 GitHub Pages 上发布的 <strong>第一篇博客文章</strong>。<br />
+我希望通过这个博客记录自己的技术笔记、和学习心得。</p>
+
+<hr />
+
+<h2 id="博客搭建过程">博客搭建过程</h2>
+
+<ol>
+  <li><strong>创建 GitHub 仓库</strong> <code class="language-plaintext highlighter-rouge">blog</code></li>
+  <li><strong>上传 HTML 和 CSS 文件</strong></li>
+  <li><strong>配置首页</strong> <code class="language-plaintext highlighter-rouge">index.html</code> 和文章列表</li>
+  <li><strong>添加第一篇文章</strong> Markdown 文件到 <code class="language-plaintext highlighter-rouge">posts/</code></li>
+  <li><strong>链接文章</strong> 到首页，确保点击查看文章详细内容</li>
+</ol>
+
+<hr />
+
+<h2 id="学到的经验">学到的经验</h2>
+
+<ul>
+  <li>使用 <strong>Markdown</strong> 编写文章，方便维护和阅读</li>
+  <li>保持文章文件命名规范，例如 <code class="language-plaintext highlighter-rouge">YYYY-MM-DD-标题.md</code></li>
+  <li>每篇文章都应该有 <strong>Front Matter</strong>（title、date、category、description）</li>
+</ul>
+
+<hr />
+
+<h2 id="后续计划">后续计划</h2>
+
+<ul>
+  <li>持续发布新文章</li>
+  <li>优化博客样式和布局</li>
+  <li>增加文章分类、标签和搜索功能</li>
+</ul>
+
 <p>感谢阅读！后续将持续记录自己的个人博客。</p>
 
+      </article>
+
+      <footer class="article-end">
+        <span>写于 2026-05-20</span>
+        <a href="../all-posts.html">← 返回文章列表</a>
+      </footer>
+    </main>
+
+    <footer class="site-footer">
+      © 2026 Alen Turing · <a href="../index.html">Alen's blog</a>
+    </footer>
+  </div>
 </body>
 </html>
