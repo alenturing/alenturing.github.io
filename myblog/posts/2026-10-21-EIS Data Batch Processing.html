@@ -1,0 +1,320 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="做原位电化学阻抗测试时，一组实验往往会产生许多 EIS 文件。逐个打开、整理频率和阻抗数据，再手动筛选电位绘图，不仅花时间，也容易把列选错或把 Nyquist 图的虚部方向画反。为此，我开发了一个 Windows 桌面工具：原位 EIS 批量处理与预览。">
+  <meta name="color-scheme" content="light dark">
+  <title>我做了一个原位 EIS 批量处理与预览软件 · Alen's blog</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #eef2f7;
+      --paper: #ffffff;
+      --ink: #17243b;
+      --muted: #64748b;
+      --line: #dfe6ef;
+      --accent: #2878d0;
+      --accent-soft: #e9f2ff;
+      --shadow: 0 24px 70px rgba(31, 52, 82, .11);
+      --body-font: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+      --heading-font: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: clamp(18px, 4vw, 56px) 18px 28px;
+      background: var(--page);
+      color: var(--ink);
+      font-family: var(--body-font);
+      line-height: 1.75;
+      transition: background-color .25s ease, color .25s ease;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .site-wrap { width: min(100%, 940px); margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 auto 18px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .brand { color: var(--ink); font-weight: 750; letter-spacing: -.03em; }
+    .top-links { display: flex; gap: 18px; }
+    .top-links a { color: var(--muted); }
+    .post-frame {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .post-header { padding: clamp(28px, 6vw, 64px) clamp(24px, 7vw, 76px) 30px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 22px; height: 2px; background: currentColor; content: ""; }
+    h1, h2, h3 { font-family: var(--heading-font); }
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(2.25rem, 7vw, 4.7rem);
+      line-height: 1.1;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .post-content {
+      padding: 4px clamp(24px, 7vw, 76px) clamp(32px, 6vw, 64px);
+      color: var(--ink);
+      font-size: 1.04rem;
+      line-height: 1.9;
+      overflow-wrap: anywhere;
+    }
+    .post-content > :first-child { margin-top: 0; }
+    .post-content h2 {
+      margin: 2.3em 0 .8em;
+      padding-bottom: .4em;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(1.4rem, 4vw, 1.9rem);
+      line-height: 1.3;
+      letter-spacing: -.035em;
+    }
+    .post-content h3 { margin: 1.8em 0 .6em; font-size: 1.25rem; }
+    .post-content p { margin: 0 0 1.15em; }
+    .post-content ul, .post-content ol { padding-left: 1.5em; margin: .8em 0 1.4em; }
+    .post-content li { padding-left: .25em; margin: .45em 0; }
+    .post-content li::marker { color: var(--accent); }
+    .post-content strong { color: var(--accent); font-weight: 750; }
+    .post-content blockquote {
+      margin: 1.8em 0;
+      padding: .9em 1.2em;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 14px 14px 0;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .post-content blockquote p:last-child { margin-bottom: 0; }
+    .post-content img { display: block; max-width: 100%; height: auto; margin: 1.6em auto; border-radius: 14px; }
+    .post-content pre {
+      overflow-x: auto;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--page) 75%, var(--paper));
+      font-size: .9rem;
+      line-height: 1.65;
+    }
+    .post-content code { padding: .15em .4em; border-radius: 5px; background: var(--accent-soft); font-size: .9em; }
+    .post-content pre code { padding: 0; background: transparent; }
+    .article-end {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px clamp(24px, 7vw, 76px);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .site-footer { padding: 22px 4px 0; color: var(--muted); font-size: .82rem; text-align: center; }
+    .site-footer a { color: inherit; }
+
+    /* 纸感编辑部：暖纸色、衬线标题、居中刊物式版面。 */
+    .theme-editorial {
+      --page: #e9e4d9;
+      --paper: #fbf8f0;
+      --ink: #302a23;
+      --muted: #817566;
+      --line: #ded5c5;
+      --accent: #a64b35;
+      --accent-soft: #f2e8dd;
+      --shadow: 0 18px 55px rgba(61, 45, 28, .09);
+      --body-font: Georgia, "Songti SC", "SimSun", serif;
+      --heading-font: Georgia, "Songti SC", "SimSun", serif;
+    }
+    .theme-editorial .topbar { font-family: var(--body-font); }
+    .theme-editorial .post-frame { border-radius: 4px; }
+    .theme-editorial .post-header { text-align: center; }
+    .theme-editorial .eyebrow { justify-content: center; letter-spacing: .2em; }
+    .theme-editorial .eyebrow::before { display: none; }
+    .theme-editorial h1 { max-width: 720px; margin: 0 auto; font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 500; letter-spacing: -.04em; }
+    .theme-editorial .meta { justify-content: center; font-family: var(--body-font); }
+    .theme-editorial .meta-item { border: 0; border-radius: 0; background: transparent; }
+    .theme-editorial .post-content { max-width: 760px; margin: 0 auto; font-size: 1.12rem; line-height: 2.05; }
+    .theme-editorial .post-content h2 { border-bottom: 1px solid var(--ink); font-weight: 500; }
+    .theme-editorial .post-content blockquote { border-left-width: 2px; border-radius: 0; font-style: italic; }
+
+    /* 夜色终端：适合技术笔记和代码记录。 */
+    .theme-terminal {
+      color-scheme: dark;
+      --page: #0b1016;
+      --paper: #111923;
+      --ink: #d9e5ee;
+      --muted: #8496a5;
+      --line: #263541;
+      --accent: #a3e635;
+      --accent-soft: #1b2a20;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .35);
+      --body-font: "Cascadia Code", Consolas, "Microsoft YaHei", monospace;
+      --heading-font: "Cascadia Code", Consolas, "Microsoft YaHei", monospace;
+    }
+    .theme-terminal .post-frame { border-radius: 16px; }
+    .theme-terminal .post-header { border-bottom: 1px solid var(--line); }
+    .theme-terminal .eyebrow { letter-spacing: .06em; }
+    .theme-terminal .eyebrow::before { width: 8px; height: 8px; border-radius: 50%; }
+    .theme-terminal h1 { font-size: clamp(1.8rem, 5vw, 3.35rem); letter-spacing: -.07em; }
+    .theme-terminal h1::before { color: var(--accent); content: "> "; }
+    .theme-terminal .meta-item { border-radius: 6px; background: #17232d; color: var(--muted); }
+    .theme-terminal .post-content h2 { border-bottom: 1px dashed var(--line); color: var(--accent); }
+    .theme-terminal .post-content h2::before { content: "## "; color: var(--muted); }
+    .theme-terminal .post-content strong { color: var(--accent); }
+    .theme-terminal .post-content blockquote { border-radius: 0 8px 8px 0; }
+    .theme-terminal .article-end { border-top-style: dashed; }
+
+    /* 瑞士极简：大字号、硬朗网格和一抹红色强调。 */
+    .theme-swiss {
+      --page: #f4f4f1;
+      --paper: #fdfdfb;
+      --ink: #171717;
+      --muted: #666;
+      --line: #c9c9c4;
+      --accent: #e44432;
+      --accent-soft: #f8e9e5;
+      --shadow: none;
+      --body-font: Arial, "Microsoft YaHei", sans-serif;
+      --heading-font: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .theme-swiss .post-frame { border: 0; border-top: 8px solid var(--ink); border-radius: 0; }
+    .theme-swiss .post-header { padding-bottom: 24px; }
+    .theme-swiss .eyebrow { letter-spacing: .18em; }
+    .theme-swiss h1 { max-width: 760px; font-size: clamp(2.7rem, 9vw, 6rem); font-weight: 850; line-height: .98; }
+    .theme-swiss .meta-item { border: 0; border-radius: 0; background: transparent; padding-left: 0; }
+    .theme-swiss .post-content { border-top: 1px solid var(--ink); font-size: 1.05rem; }
+    .theme-swiss .post-content h2 { border-bottom: 2px solid var(--ink); }
+    .theme-swiss .post-content blockquote { border-radius: 0; }
+
+    @media (max-width: 620px) {
+      body { padding: 14px 12px 22px; }
+      .topbar { align-items: flex-start; }
+      .top-links { gap: 12px; font-size: .82rem; }
+      .post-frame { border-radius: 20px; }
+      .theme-editorial .post-frame { border-radius: 4px; }
+      .theme-terminal .post-frame { border-radius: 12px; }
+      .theme-swiss .post-frame { border-radius: 0; }
+      .post-content { font-size: 1rem; }
+      .article-end { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="theme-terminal">
+  <div class="site-wrap">
+    <nav class="topbar" aria-label="主导航">
+      <a class="brand" href="../index.html">Alen 的博客</a>
+      <div class="top-links">
+        <a href="../all-posts.html">所有文章</a>
+        <a href="../about.html">关于</a>
+      </div>
+    </nav>
+
+    <main class="post-frame">
+      <header class="post-header">
+        <p class="eyebrow">夜色终端 · 技术</p>
+        <h1>我做了一个原位 EIS 批量处理与预览软件</h1>
+        <div class="meta">
+          <span class="meta-item">2026年10月21日</span>
+          <span class="meta-item">Alen</span>
+        </div>
+      </header>
+
+      <article class="post-content">
+        <p>做原位电化学阻抗测试时，一组实验往往会产生许多 EIS 文件。逐个打开、整理频率和阻抗数据，再手动筛选电位绘图，不仅花时间，也容易把列选错或把 Nyquist 图的虚部方向画反。为此，我开发了一个 Windows 桌面工具：<strong>原位 EIS 批量处理与预览</strong>。</p>
+
+<p>它可以一次读取指定文件夹中的一批数据，整理成适合继续分析和绘图的总表，并提供二维 Nyquist 与三维原位 EIS 预览。程序以独立 EXE 运行，选择数据文件夹后即可开始处理。</p>
+
+<h2 id="批量读取和手动识别">批量读取和手动识别</h2>
+
+<p>选择数据文件夹后，程序会递归查找支持的 EIS 文件，包括 CHI <code class="language-plaintext highlighter-rouge">.bin</code>、<code class="language-plaintext highlighter-rouge">.csv</code>、<code class="language-plaintext highlighter-rouge">.txt</code>、<code class="language-plaintext highlighter-rouge">.dat</code> 和 <code class="language-plaintext highlighter-rouge">.xlsx</code>。能够识别的格式会自动读取；遇到其他表格布局时，可以选一个样例文件，按预览中的实际行号和列号指定频率、Z′、Z″，以及可选的电位列。列号从 1 开始填写，程序会将规则用于同扩展名的后续文件。</p>
+
+<p>如果文件里没有电位列，也可以先导入。处理完成后，在“数据索引”中选中对应谱，点击“修改所选谱电位”补充或清除电位。这样可以先完成阻抗数据整理，再逐条补上电位；补充后总表和二维、三维预览会一起更新。</p>
+
+<h2 id="总表和绘图数据">总表和绘图数据</h2>
+
+<p>每次处理都会在源文件夹下新建 <code class="language-plaintext highlighter-rouge">EIS_processed</code> 结果目录，保留原始文件不动。结果包含 Excel 总表、对应 CSV、数据 JSON、质量日志和二维/三维预览图。总表中的工作表各有用途：</p>
+
+<ul>
+  <li><strong>测试索引：</strong>谱编号、电位、扫描段、方向、点数和来源文件。</li>
+  <li><strong>Nyquist 宽表：</strong>每条谱各有频率、Z′ 和 −Z″ 列，可按谱编号批量绘制二维图。</li>
+  <li><strong>Bode 宽表：</strong>频率、阻抗模值和相位数据。</li>
+  <li><strong>EIS 长表：</strong>每行一个频率点，包含电位和谱编号，可用于三维绘图或分组分析。</li>
+  <li><strong>NegZimag 矩阵：</strong>按真实频率对齐的 −Z″ 矩阵，便于绘制热图。</li>
+  <li><strong>质量日志和使用说明：</strong>记录读取失败、缺少信息和数据字段说明。</li>
+</ul>
+
+<p>程序保留原始频率点和阻抗值，不对数据进行平滑、拟合或插值。不同谱的频率网格不一致时，矩阵按实测频率对齐，缺少的频率点留空。</p>
+
+<h2 id="筛选和预览">筛选和预览</h2>
+
+<p>侧栏可以通过电压范围和扫描段筛选数据，也可以切换二维叠加或纵向错位显示。二维和三维预览支持鼠标缩放、平移和旋转；调好范围后，可以保存当前筛选对应的 PNG 和 CSV。<code class="language-plaintext highlighter-rouge">Ctrl+E</code> 可打开最近一次导出目录，<code class="language-plaintext highlighter-rouge">Ctrl+O</code> 可打开本批次的完整结果目录。</p>
+
+<p>有些仪器或导出格式的 Z″ 正负号约定与绘图习惯不同，直接画图时曲线可能上下颠倒。侧栏的 <strong>Nyquist 虚部符号</strong>可以切换 <code class="language-plaintext highlighter-rouge">−Z″（标准）</code> 和 <code class="language-plaintext highlighter-rouge">Z″（原始）</code>，二维、三维预览及保存的预览图会同步更新。这个选项只改变图上的纵轴显示；汇总表仍同时保留原始 Z″ 和派生 −Z″，不会改写测量数据。</p>
+
+<h2 id="使用时的注意点">使用时的注意点</h2>
+
+<p>电位信息只从数据内容读取或由使用者手动补充，程序不会根据文件名猜电位。没有电位的谱仍可用于二维 Nyquist 预览，但无法按电压筛选，也不能放置到三维电位轴，直到补充电位为止。对于手动识别规则，建议先核对预览中的行列号，再处理整批文件；如果样例文件与其他文件的列布局不同，应分别检查。</p>
+
+<p>我把重复的文件读取、数据整理和预览步骤收进同一个工具里，希望能让原位 EIS 数据从实验文件夹到可绘图表格的过程更直接，也更容易复核。更多项目可见<a href="https://alenturing.github.io/myblog/">个人主页</a>。</p>
+
+      </article>
+
+      <footer class="article-end">
+        <span>写于 2026-10-21</span>
+        <a href="../all-posts.html">← 返回文章列表</a>
+      </footer>
+    </main>
+
+    <footer class="site-footer">
+      © 2026 Alen Turing · <a href="../index.html">Alen's blog</a>
+    </footer>
+  </div>
+</body>
+</html>
