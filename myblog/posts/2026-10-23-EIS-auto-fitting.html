@@ -1,0 +1,335 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="电化学阻抗谱（EIS）常用等效电路描述电极界面、电荷转移和扩散等过程。实际分析时，几个弛豫过程可能彼此重叠；即使某个电路画出的曲线看起来贴合，也不代表它就是唯一正确的物理模型。为了让数据导入、候选模型比较和结果复核更连贯，我开发了一个 Windows 桌面软件：EIS Battery Intelligence。">
+  <meta name="color-scheme" content="light dark">
+  <title>我做了一个 EIS 等效电路自动拟合软件 · Alen's blog</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #eef2f7;
+      --paper: #ffffff;
+      --ink: #17243b;
+      --muted: #64748b;
+      --line: #dfe6ef;
+      --accent: #2878d0;
+      --accent-soft: #e9f2ff;
+      --shadow: 0 24px 70px rgba(31, 52, 82, .11);
+      --body-font: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+      --heading-font: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: clamp(18px, 4vw, 56px) 18px 28px;
+      background: var(--page);
+      color: var(--ink);
+      font-family: var(--body-font);
+      line-height: 1.75;
+      transition: background-color .25s ease, color .25s ease;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .site-wrap { width: min(100%, 940px); margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 auto 18px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .brand { color: var(--ink); font-weight: 750; letter-spacing: -.03em; }
+    .top-links { display: flex; gap: 18px; }
+    .top-links a { color: var(--muted); }
+    .post-frame {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .post-header { padding: clamp(28px, 6vw, 64px) clamp(24px, 7vw, 76px) 30px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 22px; height: 2px; background: currentColor; content: ""; }
+    h1, h2, h3 { font-family: var(--heading-font); }
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(2.25rem, 7vw, 4.7rem);
+      line-height: 1.1;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .post-content {
+      padding: 4px clamp(24px, 7vw, 76px) clamp(32px, 6vw, 64px);
+      color: var(--ink);
+      font-size: 1.04rem;
+      line-height: 1.9;
+      overflow-wrap: anywhere;
+    }
+    .post-content > :first-child { margin-top: 0; }
+    .post-content h2 {
+      margin: 2.3em 0 .8em;
+      padding-bottom: .4em;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(1.4rem, 4vw, 1.9rem);
+      line-height: 1.3;
+      letter-spacing: -.035em;
+    }
+    .post-content h3 { margin: 1.8em 0 .6em; font-size: 1.25rem; }
+    .post-content p { margin: 0 0 1.15em; }
+    .post-content ul, .post-content ol { padding-left: 1.5em; margin: .8em 0 1.4em; }
+    .post-content li { padding-left: .25em; margin: .45em 0; }
+    .post-content li::marker { color: var(--accent); }
+    .post-content strong { color: var(--accent); font-weight: 750; }
+    .post-content blockquote {
+      margin: 1.8em 0;
+      padding: .9em 1.2em;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 14px 14px 0;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .post-content blockquote p:last-child { margin-bottom: 0; }
+    .post-content img { display: block; max-width: 100%; height: auto; margin: 1.6em auto; border-radius: 14px; }
+    .post-content pre {
+      overflow-x: auto;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--page) 75%, var(--paper));
+      font-size: .9rem;
+      line-height: 1.65;
+    }
+    .post-content code { padding: .15em .4em; border-radius: 5px; background: var(--accent-soft); font-size: .9em; }
+    .post-content pre code { padding: 0; background: transparent; }
+    .article-end {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px clamp(24px, 7vw, 76px);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .site-footer { padding: 22px 4px 0; color: var(--muted); font-size: .82rem; text-align: center; }
+    .site-footer a { color: inherit; }
+
+    /* 纸感编辑部：暖纸色、衬线标题、居中刊物式版面。 */
+    .theme-editorial {
+      --page: #e9e4d9;
+      --paper: #fbf8f0;
+      --ink: #302a23;
+      --muted: #817566;
+      --line: #ded5c5;
+      --accent: #a64b35;
+      --accent-soft: #f2e8dd;
+      --shadow: 0 18px 55px rgba(61, 45, 28, .09);
+      --body-font: Georgia, "Songti SC", "SimSun", serif;
+      --heading-font: Georgia, "Songti SC", "SimSun", serif;
+    }
+    .theme-editorial .topbar { font-family: var(--body-font); }
+    .theme-editorial .post-frame { border-radius: 4px; }
+    .theme-editorial .post-header { text-align: center; }
+    .theme-editorial .eyebrow { justify-content: center; letter-spacing: .2em; }
+    .theme-editorial .eyebrow::before { display: none; }
+    .theme-editorial h1 { max-width: 720px; margin: 0 auto; font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 500; letter-spacing: -.04em; }
+    .theme-editorial .meta { justify-content: center; font-family: var(--body-font); }
+    .theme-editorial .meta-item { border: 0; border-radius: 0; background: transparent; }
+    .theme-editorial .post-content { max-width: 760px; margin: 0 auto; font-size: 1.12rem; line-height: 2.05; }
+    .theme-editorial .post-content h2 { border-bottom: 1px solid var(--ink); font-weight: 500; }
+    .theme-editorial .post-content blockquote { border-left-width: 2px; border-radius: 0; font-style: italic; }
+
+    /* 夜色终端：适合技术笔记和代码记录。 */
+    .theme-terminal {
+      color-scheme: dark;
+      --page: #0b1016;
+      --paper: #111923;
+      --ink: #d9e5ee;
+      --muted: #8496a5;
+      --line: #263541;
+      --accent: #a3e635;
+      --accent-soft: #1b2a20;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .35);
+      --body-font: "Cascadia Code", Consolas, "Microsoft YaHei", monospace;
+      --heading-font: "Cascadia Code", Consolas, "Microsoft YaHei", monospace;
+    }
+    .theme-terminal .post-frame { border-radius: 16px; }
+    .theme-terminal .post-header { border-bottom: 1px solid var(--line); }
+    .theme-terminal .eyebrow { letter-spacing: .06em; }
+    .theme-terminal .eyebrow::before { width: 8px; height: 8px; border-radius: 50%; }
+    .theme-terminal h1 { font-size: clamp(1.8rem, 5vw, 3.35rem); letter-spacing: -.07em; }
+    .theme-terminal h1::before { color: var(--accent); content: "> "; }
+    .theme-terminal .meta-item { border-radius: 6px; background: #17232d; color: var(--muted); }
+    .theme-terminal .post-content h2 { border-bottom: 1px dashed var(--line); color: var(--accent); }
+    .theme-terminal .post-content h2::before { content: "## "; color: var(--muted); }
+    .theme-terminal .post-content strong { color: var(--accent); }
+    .theme-terminal .post-content blockquote { border-radius: 0 8px 8px 0; }
+    .theme-terminal .article-end { border-top-style: dashed; }
+
+    /* 瑞士极简：大字号、硬朗网格和一抹红色强调。 */
+    .theme-swiss {
+      --page: #f4f4f1;
+      --paper: #fdfdfb;
+      --ink: #171717;
+      --muted: #666;
+      --line: #c9c9c4;
+      --accent: #e44432;
+      --accent-soft: #f8e9e5;
+      --shadow: none;
+      --body-font: Arial, "Microsoft YaHei", sans-serif;
+      --heading-font: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .theme-swiss .post-frame { border: 0; border-top: 8px solid var(--ink); border-radius: 0; }
+    .theme-swiss .post-header { padding-bottom: 24px; }
+    .theme-swiss .eyebrow { letter-spacing: .18em; }
+    .theme-swiss h1 { max-width: 760px; font-size: clamp(2.7rem, 9vw, 6rem); font-weight: 850; line-height: .98; }
+    .theme-swiss .meta-item { border: 0; border-radius: 0; background: transparent; padding-left: 0; }
+    .theme-swiss .post-content { border-top: 1px solid var(--ink); font-size: 1.05rem; }
+    .theme-swiss .post-content h2 { border-bottom: 2px solid var(--ink); }
+    .theme-swiss .post-content blockquote { border-radius: 0; }
+
+    @media (max-width: 620px) {
+      body { padding: 14px 12px 22px; }
+      .topbar { align-items: flex-start; }
+      .top-links { gap: 12px; font-size: .82rem; }
+      .post-frame { border-radius: 20px; }
+      .theme-editorial .post-frame { border-radius: 4px; }
+      .theme-terminal .post-frame { border-radius: 12px; }
+      .theme-swiss .post-frame { border-radius: 0; }
+      .post-content { font-size: 1rem; }
+      .article-end { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="theme-terminal">
+  <div class="site-wrap">
+    <nav class="topbar" aria-label="主导航">
+      <a class="brand" href="../index.html">Alen 的博客</a>
+      <div class="top-links">
+        <a href="../all-posts.html">所有文章</a>
+        <a href="../about.html">关于</a>
+      </div>
+    </nav>
+
+    <main class="post-frame">
+      <header class="post-header">
+        <p class="eyebrow">夜色终端 · 技术</p>
+        <h1>我做了一个 EIS 等效电路自动拟合软件</h1>
+        <div class="meta">
+          <span class="meta-item">2026年10月23日</span>
+          <span class="meta-item">Alen</span>
+        </div>
+      </header>
+
+      <article class="post-content">
+        <p>电化学阻抗谱（EIS）常用等效电路描述电极界面、电荷转移和扩散等过程。实际分析时，几个弛豫过程可能彼此重叠；即使某个电路画出的曲线看起来贴合，也不代表它就是唯一正确的物理模型。为了让数据导入、候选模型比较和结果复核更连贯，我开发了一个 Windows 桌面软件：<strong>EIS Battery Intelligence</strong>。</p>
+
+<p>它可以从实验文件读取阻抗数据，检查数据质量，拟合多个常见等效电路，并把实验谱、拟合结果、残差和对应电路图放在一起查看。软件面向锂电池、固态电池和电极界面等 EIS 分析场景；SEI、体相或晶界等名称是候选模型的物理解释，不会仅凭拟合结果就被认定为已证实的机制。</p>
+
+<h2 id="从实验文件导入">从实验文件导入</h2>
+
+<p>软件支持 CSV、TXT、DAT、XLSX，以及经过格式校验的 CHI IMP 阻抗谱 <code class="language-plaintext highlighter-rouge">.bin</code> 文件。表格数据会尝试识别频率、阻抗实部和虚部；如果列名不常见，可以先预览数据，再手动指定三列。频率和阻抗单位、虚部符号约定也可以检查和设置。</p>
+
+<p>CHI <code class="language-plaintext highlighter-rouge">.bin</code> 是仪器二进制记录，不是通用表格。软件会核对文件标记、阻抗类型、记录完整性、重复频率校验值和频率顺序，只导入符合当前 CHI EIS 解码规则的文件。其他来源的 <code class="language-plaintext highlighter-rouge">.bin</code> 如果结构不同，软件会提示格式不受支持，而不会猜测数据布局。</p>
+
+<p>导入之后，界面会显示有效点数、频率跨度、采样密度和异常提示。空值、非正频率或可疑点会被标记；原始文件不会被改写，异常候选也不会被静默删除。对于 CSV、TXT、DAT 和 XLSX，可以把文件拖到窗口中导入，也可以把数据文件拖到 EXE 图标上启动并导入。</p>
+
+<h2 id="先检查数据再决定参与拟合的测点">先检查数据，再决定参与拟合的测点</h2>
+
+<p>软件提供线性 Kramers–Kronig（Lin-KK）一致性检查，用来观察当前阻抗数据与线性、因果、稳定假设是否相容，并标记残差较大的测点候选。KK 标记只是复核线索：非线性、测试期间状态变化、频率窗口不足或基函数限制也会造成较大残差，所以软件不会自动把候选点当作坏数据删除。用户可以逐点选择是否纳入后续拟合。</p>
+
+<p>拟合前还可以按阻抗实部 Z′ 和原始带符号虚部 Z″ 设置数值范围。手动范围与 KK 点选共同确定拟合测点；未参与拟合的数据仍会保留在全谱图和点选记录中。软件也提供 DRT 和 DOP 分析作为观察时间尺度特征的工具，可在需要时为等效电路初值提供线索。</p>
+
+<h2 id="多种候选电路和有界拟合">多种候选电路和有界拟合</h2>
+
+<p>自动分析会比较一组预设电路，包括串联电阻、一个或多个 R–CPE 支路、Randles–Warburg 电路、含开路或短路有限扩散的电路、多孔电极传输线，以及带吸附感性响应的候选结构。体相、晶界和 SEI 等命名用于表达可能的体系解释；相同数学拓扑不会因名称不同而被当作不同的电路证据。</p>
+
+<p>模型库目前包含 28 个预设名称，对应 26 种不同的数学拓扑。拟合使用 SciPy 的有界非线性最小二乘，并从多组初值启动计算。标准、快速和深入模式采用不同的初值数量；深入模式还会对排名靠前的拓扑做额外全局搜索和局部复核。所有候选模型按同一拟合点集、权重方式和统计定义比较，避免某个模型因为使用了不同数据或误差算法而占优势。</p>
+
+<p>软件实现电阻、电容、CPE、电感、半无限 Warburg，以及开路端 Wo 和短路端 Ws 有限长度 Warburg 元件，并按电路的串联、并联关系计算复阻抗。CPE 参数 Q 的单位随指数 n 改变，不能直接当作理想电容；半无限 Warburg 和有限长度 Warburg 的参数含义及边界条件也不同。</p>
+
+<h2 id="图形参数与模型比较">图形、参数与模型比较</h2>
+
+<p>分析结果包括 Nyquist 图、Bode 模值和相位图、拟合曲线及残差。电路与参数页会同时显示当前模型的等效电路图和 Nyquist 拟合效果。切换候选模型时，电路图、拟合曲线、参数和误差指标会同步更新，便于比较不同假设对同一组数据的解释。</p>
+
+<p>参数表显示元件参数、单位、边界状态、可辨识性提示，以及在条件允许时给出的 95% 置信区间。若参数触及边界、数据不足以区分参数，或残差和局部近似不支持可靠区间，软件会给出警告或不提供置信区间。</p>
+
+<p>候选模型比较中包含几种常用统计量：</p>
+
+<ul>
+  <li><strong>RSS</strong>：残差平方和，反映整体误差平方的累计值。</li>
+  <li><strong>RMSE</strong>：均方根误差，以阻抗单位表示，便于理解典型残差尺度。</li>
+  <li><strong>AICc</strong>：小样本修正的 Akaike 信息准则，在拟合误差之外惩罚模型参数数量。</li>
+  <li><strong>BIC</strong>：贝叶斯信息准则，也会惩罚复杂模型，惩罚强度随数据点数变化。</li>
+  <li><strong>Rwp</strong>：软件用于 EIS 复阻抗相对误差比较的指标，按阻抗模值归一化后汇总实部和虚部偏差。这里的定义不是晶体学衍射分析中的 Rwp。</li>
+</ul>
+
+<p>软件支持未加权拟合和按阻抗模值归一化的拟合。曲线视觉接近只是检查的一部分；残差分布、模型复杂度、拟合是否收敛、参数边界和可辨识性也会影响模型排序。若几个候选电路表现相近，分析结果应保留这种不确定性，而不是宣称存在唯一正确电路。</p>
+
+<h2 id="导出和复核">导出和复核</h2>
+
+<p>结果可以导出为 CSV、Excel、拟合图、等效电路图和离线 HTML 分析报告，也可以保存为 <code class="language-plaintext highlighter-rouge">.eisb</code> 项目文件供后续打开。报告会整理数据质量提示、拟合点范围、参数、残差、模型排名和统计指标，并说明结果解释的科学局限。导出的原始导入表和测点记录可用于核对哪些数据实际参与了分析。</p>
+
+<p>这款软件希望把 EIS 拟合从“选一个电路、看一条曲线”变成可复核的比较流程：先检查数据，再统一条件比较候选模型，最后结合参数可辨识性和测试背景解释结果。等效电路是对阻抗响应的数学描述；具体过程归属仍需要材料结构、实验条件和其他表征共同支持。</p>
+
+<p>软件作者：<strong>Alen Turing</strong>。更多项目与文章可见<a href="https://alenturing.github.io/myblog/">个人主页</a>。</p>
+
+      </article>
+
+      <footer class="article-end">
+        <span>写于 2026-10-23</span>
+        <a href="../all-posts.html">← 返回文章列表</a>
+      </footer>
+    </main>
+
+    <footer class="site-footer">
+      © 2026 Alen Turing · <a href="../index.html">Alen's blog</a>
+    </footer>
+  </div>
+</body>
+</html>
