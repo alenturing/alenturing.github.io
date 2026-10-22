@@ -1,0 +1,337 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="原位 EIS 测试通常会连续产生许多阻抗谱。想比较不同电位下的弛豫过程，除了整理频率和阻抗数据，还需要逐条进行 DRT 反演，再把结果按电位和充放电过程排好。为此，我开发了一个 Windows 桌面工具：原位 DRT 批量分析与预览。">
+  <meta name="color-scheme" content="light dark">
+  <title>我做了一个原位 DRT 批量分析与预览软件 · Alen's blog</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #eef2f7;
+      --paper: #ffffff;
+      --ink: #17243b;
+      --muted: #64748b;
+      --line: #dfe6ef;
+      --accent: #2878d0;
+      --accent-soft: #e9f2ff;
+      --shadow: 0 24px 70px rgba(31, 52, 82, .11);
+      --body-font: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+      --heading-font: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: clamp(18px, 4vw, 56px) 18px 28px;
+      background: var(--page);
+      color: var(--ink);
+      font-family: var(--body-font);
+      line-height: 1.75;
+      transition: background-color .25s ease, color .25s ease;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .site-wrap { width: min(100%, 940px); margin: 0 auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 auto 18px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .brand { color: var(--ink); font-weight: 750; letter-spacing: -.03em; }
+    .top-links { display: flex; gap: 18px; }
+    .top-links a { color: var(--muted); }
+    .post-frame {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .post-header { padding: clamp(28px, 6vw, 64px) clamp(24px, 7vw, 76px) 30px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 22px; height: 2px; background: currentColor; content: ""; }
+    h1, h2, h3 { font-family: var(--heading-font); }
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(2.25rem, 7vw, 4.7rem);
+      line-height: 1.1;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .post-content {
+      padding: 4px clamp(24px, 7vw, 76px) clamp(32px, 6vw, 64px);
+      color: var(--ink);
+      font-size: 1.04rem;
+      line-height: 1.9;
+      overflow-wrap: anywhere;
+    }
+    .post-content > :first-child { margin-top: 0; }
+    .post-content h2 {
+      margin: 2.3em 0 .8em;
+      padding-bottom: .4em;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(1.4rem, 4vw, 1.9rem);
+      line-height: 1.3;
+      letter-spacing: -.035em;
+    }
+    .post-content h3 { margin: 1.8em 0 .6em; font-size: 1.25rem; }
+    .post-content p { margin: 0 0 1.15em; }
+    .post-content ul, .post-content ol { padding-left: 1.5em; margin: .8em 0 1.4em; }
+    .post-content li { padding-left: .25em; margin: .45em 0; }
+    .post-content li::marker { color: var(--accent); }
+    .post-content strong { color: var(--accent); font-weight: 750; }
+    .post-content blockquote {
+      margin: 1.8em 0;
+      padding: .9em 1.2em;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 14px 14px 0;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+    .post-content blockquote p:last-child { margin-bottom: 0; }
+    .post-content img { display: block; max-width: 100%; height: auto; margin: 1.6em auto; border-radius: 14px; }
+    .post-content pre {
+      overflow-x: auto;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--page) 75%, var(--paper));
+      font-size: .9rem;
+      line-height: 1.65;
+    }
+    .post-content code { padding: .15em .4em; border-radius: 5px; background: var(--accent-soft); font-size: .9em; }
+    .post-content pre code { padding: 0; background: transparent; }
+    .article-end {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px clamp(24px, 7vw, 76px);
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .site-footer { padding: 22px 4px 0; color: var(--muted); font-size: .82rem; text-align: center; }
+    .site-footer a { color: inherit; }
+
+    /* 纸感编辑部：暖纸色、衬线标题、居中刊物式版面。 */
+    .theme-editorial {
+      --page: #e9e4d9;
+      --paper: #fbf8f0;
+      --ink: #302a23;
+      --muted: #817566;
+      --line: #ded5c5;
+      --accent: #a64b35;
+      --accent-soft: #f2e8dd;
+      --shadow: 0 18px 55px rgba(61, 45, 28, .09);
+      --body-font: Georgia, "Songti SC", "SimSun", serif;
+      --heading-font: Georgia, "Songti SC", "SimSun", serif;
+    }
+    .theme-editorial .topbar { font-family: var(--body-font); }
+    .theme-editorial .post-frame { border-radius: 4px; }
+    .theme-editorial .post-header { text-align: center; }
+    .theme-editorial .eyebrow { justify-content: center; letter-spacing: .2em; }
+    .theme-editorial .eyebrow::before { display: none; }
+    .theme-editorial h1 { max-width: 720px; margin: 0 auto; font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 500; letter-spacing: -.04em; }
+    .theme-editorial .meta { justify-content: center; font-family: var(--body-font); }
+    .theme-editorial .meta-item { border: 0; border-radius: 0; background: transparent; }
+    .theme-editorial .post-content { max-width: 760px; margin: 0 auto; font-size: 1.12rem; line-height: 2.05; }
+    .theme-editorial .post-content h2 { border-bottom: 1px solid var(--ink); font-weight: 500; }
+    .theme-editorial .post-content blockquote { border-left-width: 2px; border-radius: 0; font-style: italic; }
+
+    /* 夜色终端：适合技术笔记和代码记录。 */
+    .theme-terminal {
+      color-scheme: dark;
+      --page: #0b1016;
+      --paper: #111923;
+      --ink: #d9e5ee;
+      --muted: #8496a5;
+      --line: #263541;
+      --accent: #a3e635;
+      --accent-soft: #1b2a20;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .35);
+      --body-font: "Cascadia Code", Consolas, "Microsoft YaHei", monospace;
+      --heading-font: "Cascadia Code", Consolas, "Microsoft YaHei", monospace;
+    }
+    .theme-terminal .post-frame { border-radius: 16px; }
+    .theme-terminal .post-header { border-bottom: 1px solid var(--line); }
+    .theme-terminal .eyebrow { letter-spacing: .06em; }
+    .theme-terminal .eyebrow::before { width: 8px; height: 8px; border-radius: 50%; }
+    .theme-terminal h1 { font-size: clamp(1.8rem, 5vw, 3.35rem); letter-spacing: -.07em; }
+    .theme-terminal h1::before { color: var(--accent); content: "> "; }
+    .theme-terminal .meta-item { border-radius: 6px; background: #17232d; color: var(--muted); }
+    .theme-terminal .post-content h2 { border-bottom: 1px dashed var(--line); color: var(--accent); }
+    .theme-terminal .post-content h2::before { content: "## "; color: var(--muted); }
+    .theme-terminal .post-content strong { color: var(--accent); }
+    .theme-terminal .post-content blockquote { border-radius: 0 8px 8px 0; }
+    .theme-terminal .article-end { border-top-style: dashed; }
+
+    /* 瑞士极简：大字号、硬朗网格和一抹红色强调。 */
+    .theme-swiss {
+      --page: #f4f4f1;
+      --paper: #fdfdfb;
+      --ink: #171717;
+      --muted: #666;
+      --line: #c9c9c4;
+      --accent: #e44432;
+      --accent-soft: #f8e9e5;
+      --shadow: none;
+      --body-font: Arial, "Microsoft YaHei", sans-serif;
+      --heading-font: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .theme-swiss .post-frame { border: 0; border-top: 8px solid var(--ink); border-radius: 0; }
+    .theme-swiss .post-header { padding-bottom: 24px; }
+    .theme-swiss .eyebrow { letter-spacing: .18em; }
+    .theme-swiss h1 { max-width: 760px; font-size: clamp(2.7rem, 9vw, 6rem); font-weight: 850; line-height: .98; }
+    .theme-swiss .meta-item { border: 0; border-radius: 0; background: transparent; padding-left: 0; }
+    .theme-swiss .post-content { border-top: 1px solid var(--ink); font-size: 1.05rem; }
+    .theme-swiss .post-content h2 { border-bottom: 2px solid var(--ink); }
+    .theme-swiss .post-content blockquote { border-radius: 0; }
+
+    @media (max-width: 620px) {
+      body { padding: 14px 12px 22px; }
+      .topbar { align-items: flex-start; }
+      .top-links { gap: 12px; font-size: .82rem; }
+      .post-frame { border-radius: 20px; }
+      .theme-editorial .post-frame { border-radius: 4px; }
+      .theme-terminal .post-frame { border-radius: 12px; }
+      .theme-swiss .post-frame { border-radius: 0; }
+      .post-content { font-size: 1rem; }
+      .article-end { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="theme-terminal">
+  <div class="site-wrap">
+    <nav class="topbar" aria-label="主导航">
+      <a class="brand" href="../index.html">Alen 的博客</a>
+      <div class="top-links">
+        <a href="../all-posts.html">所有文章</a>
+        <a href="../about.html">关于</a>
+      </div>
+    </nav>
+
+    <main class="post-frame">
+      <header class="post-header">
+        <p class="eyebrow">夜色终端 · 技术</p>
+        <h1>我做了一个原位 DRT 批量分析与预览软件</h1>
+        <div class="meta">
+          <span class="meta-item">2026年10月22日</span>
+          <span class="meta-item">Alen</span>
+        </div>
+      </header>
+
+      <article class="post-content">
+        <p>原位 EIS 测试通常会连续产生许多阻抗谱。想比较不同电位下的弛豫过程，除了整理频率和阻抗数据，还需要逐条进行 DRT 反演，再把结果按电位和充放电过程排好。为此，我开发了一个 Windows 桌面工具：<strong>原位 DRT 批量分析与预览</strong>。</p>
+
+<p>选择数据文件夹后，程序会批量读取 EIS 数据、计算 DRT，并生成可用于后续绘图的总表。软件提供堆叠图和电位–弛豫时间热图预览，可以按电压、充电或放电过程筛选，也可以调整对数弛豫时间范围。程序以独立 EXE 运行，无需另外安装 Python、Excel 或 Node。</p>
+
+<h2 id="批量读取和手动识别">批量读取和手动识别</h2>
+
+<p>程序会递归搜索所选文件夹及其子文件夹，自动识别 CHI <code class="language-plaintext highlighter-rouge">.bin</code>、<code class="language-plaintext highlighter-rouge">.csv</code>、<code class="language-plaintext highlighter-rouge">.txt</code>、<code class="language-plaintext highlighter-rouge">.dat</code> 和 <code class="language-plaintext highlighter-rouge">.xlsx</code> 数据。CHI 二进制文件使用内置读取方式；常见表格布局也会自动识别。</p>
+
+<p>如果自动识别失败，或频率、阻抗列的排列与常见格式不同，可以点击“手动识别格式”，选择一份代表性文件。在数据预览中，左侧会显示原始行号，列标题显示列号；按实际内容指定频率、Z′、Z″，还可以选择电位列或填写固定电位。行列编号都从 1 开始。保存后，规则按文件扩展名记忆，并用于当前批次和之后的同类文件。<code class="language-plaintext highlighter-rouge">.bin</code> 是仪器二进制记录，不使用表格列规则。</p>
+
+<p>以 <code class="language-plaintext highlighter-rouge">C:\Users\admin\Desktop\EIS</code> 为例，整目录包含 3 个 <code class="language-plaintext highlighter-rouge">.bin</code>、3 个 <code class="language-plaintext highlighter-rouge">.csv</code>、3 个 <code class="language-plaintext highlighter-rouge">.txt</code> 和 2 个 <code class="language-plaintext highlighter-rouge">.xlsx</code> 文件，程序会读取这 11 个文件。如果不同格式目录放的是同一批实验的重复副本，它们仍会作为不同文件分别处理；想避免重复结果时，可以只选择其中一种格式的子文件夹。</p>
+
+<h2 id="drt-计算和充放电分段">DRT 计算和充放电分段</h2>
+
+<p>程序从数据内容读取电位，并按电位变化方向划分过程。默认映射为<strong>电位上升＝充电，电位下降＝放电</strong>，也可以在计算设置中切换映射。没有电位列时，可以在手动规则中指定固定电位；如果暂时没有电位，数据仍可参与反演和堆叠图分析，但无法按电压范围筛选，也不能放到电位热图上。</p>
+
+<p>每条有效 EIS 谱都会单独进行 DRT 反演。程序按连续过程分组展示，不会把不同过程里相同的电位自动合并或平均。自动正则化会对候选 λ 进行交叉验证；也可以手动设置 λ 和 τ 网格点数。修改这些计算参数后，需要重新处理数据。</p>
+
+<p>DRT 输出位于源文件夹下的 <code class="language-plaintext highlighter-rouge">DRT_processed\时间戳\</code>。其中包括 Excel 汇总表、CSV 数据、阻抗重构检查、正则化扫描、质量日志、算法说明，以及堆叠图和热图预览。</p>
+
+<h2 id="总表和绘图数据">总表和绘图数据</h2>
+
+<p>总表中的工作表按绘图和复核用途组织：</p>
+
+<ul>
+  <li><strong>分析索引：</strong>每条谱的电位、充放电分支、独立过程编号、来源文件、正则化参数和拟合质量信息。</li>
+  <li><strong>堆叠图_宽表：</strong>一列 τ 和多列 DRT 分布，可绘制全体谱的堆叠图。</li>
+  <li><strong>充电_堆叠宽表、放电_堆叠宽表：</strong>分别整理充电和放电谱；多个连续过程会单独分组。</li>
+  <li><strong>热图_长表：</strong>包含 <code class="language-plaintext highlighter-rouge">Log10_tau_s</code>、<code class="language-plaintext highlighter-rouge">Potential_V</code> 和 DRT 强度，可用于绘制电位–弛豫时间热图。根据 <code class="language-plaintext highlighter-rouge">Run_ID</code> 分开绘制不同连续过程，并优先筛选 <code class="language-plaintext highlighter-rouge">In_measured_window=True</code> 的实测时间窗数据。</li>
+  <li><strong>R###_充电/放电#_热图：</strong>每个连续过程单独提供热图矩阵，便于直接在绘图软件中使用。</li>
+  <li><strong>原始EIS长表、阻抗重构检查、正则化扫描：</strong>用于查看输入阻抗点、拟合重构误差和自动 λ 的选择依据。</li>
+  <li><strong>绘图指南、质量日志、算法说明：</strong>说明表格坐标、单位、读取情况和计算提示。</li>
+</ul>
+
+<p>DRT 的 γ 表示每自然对数时间 <code class="language-plaintext highlighter-rouge">ln(τ)</code> 的分布密度，单位为 Ω。若绘图横轴使用 <code class="language-plaintext highlighter-rouge">log10(τ)</code>，密度换算为 <code class="language-plaintext highlighter-rouge">γ × ln(10)</code>。软件表格会区分原始 DRT 数值、显示偏移后的堆叠坐标和热图强度，绘图时可按“绘图指南”页选择对应列。</p>
+
+<h2 id="电压范围时间范围和异常谱">电压范围、时间范围和异常谱</h2>
+
+<p>主界面可以切换“DRT 堆叠图”和“DRT 热图”，并通过电压范围和充放电下拉框筛选。堆叠图可调谱间距；热图可切换对数色标和每谱归一化。不同连续过程会分面显示，热图不会把缺失电位插值成数据。</p>
+
+<p>左侧“弛豫时间范围（对数）”默认使用全批实测频率对应的时间窗。取消默认选项后，可以输入 <code class="language-plaintext highlighter-rouge">log10(τ/s)</code> 的上下限；例如输入 <code class="language-plaintext highlighter-rouge">-4</code> 到 <code class="language-plaintext highlighter-rouge">1</code>，表示查看 <code class="language-plaintext highlighter-rouge">10^-4</code> 到 <code class="language-plaintext highlighter-rouge">10^1</code> 秒。这个范围只裁剪图形和筛选导出的绘图数据，不会改变反演网格、拟合结果或完整总表；超出实测时间窗的部分不会外推。</p>
+
+<p>在“数据索引与剔除”中可以手动选择多条谱并排除，也可以根据重构误差阈值一键筛除。被排除的是整条谱，不会删除其中某个频率点；可查看剔除原因并恢复。异常剔除仅作用于预览和筛选导出，完整反演总表与原始数据仍会保留。高误差和边界提示是需要检查的信号，不等同于自动判定实验数据无效。</p>
+
+<p>点击“保存当前预览与筛选数据”，程序会导出当前范围对应的堆叠图、热图和绘图表格，并记录所用筛选设置。<code class="language-plaintext highlighter-rouge">Ctrl+E</code> 打开最近一次导出目录，<code class="language-plaintext highlighter-rouge">Ctrl+O</code> 打开本批次结果目录。点击右上角作者署名可打开<a href="https://alenturing.github.io/myblog/">个人主页</a>。</p>
+
+<h2 id="方法和使用边界">方法和使用边界</h2>
+
+<p>DRT 通过阻抗谱反演出弛豫时间分布，帮助比较不同时间尺度上的阻抗贡献。程序使用非负 DRT 分布和 Tikhonov 正则化，并对频率范围对应的实测时间窗进行标记。输入阻抗不会被平滑、删点或插值；热图也不会对电位进行插值。</p>
+
+<p>拟合重构误差、正则化参数落在搜索边界、正虚部或实测时间窗外分布等情况会记录质量提示，方便定位需要复核的谱。重构误差不是 Kramers–Kronig 检验，也不能单独证明某个 DRT 峰对应某种具体物理过程。分析结果应结合原始 EIS、测试条件和其他表征进行解释。</p>
+
+<p>我希望这个工具能把原位 EIS 数据从实验文件夹带到 DRT 图表的过程变得更直接，也让每一步筛选和结果复核都更清楚。更多项目可见<a href="https://alenturing.github.io/myblog/">个人主页</a>。</p>
+
+      </article>
+
+      <footer class="article-end">
+        <span>写于 2026-10-22</span>
+        <a href="../all-posts.html">← 返回文章列表</a>
+      </footer>
+    </main>
+
+    <footer class="site-footer">
+      © 2026 Alen Turing · <a href="../index.html">Alen's blog</a>
+    </footer>
+  </div>
+</body>
+</html>
